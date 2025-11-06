@@ -82,3 +82,19 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
   padding: 40px 0;
   opacity: 0.8;
 }
+/* ОБО МНЕ */
+.about-card {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+#about h2 {
+  margin-bottom: 15px;
+  font-size: 28px;
+  font-weight: 700;
+}
