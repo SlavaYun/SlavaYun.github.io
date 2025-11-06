@@ -10,6 +10,7 @@
 </head>
 <body>
     <div class="noise"></div>
+    <div class="matrix"></div>
 
 <!-- HERO / ГЛАВНЫЙ ЭКРАН -->
  <div class="hud" style="top:20px; left:20px;">SYS: ONLINE</div>
@@ -82,5 +83,21 @@
   <footer>
     <p>© 2025 Slava Yun</p>
   </footer>
+  <script>
+  const matrix = document.querySelector('.matrix');
+  const symbols = "カタカナ01☷☲☵☶アビスネクロ✦ΔΞΨΣ☢☣";
+
+  function spawn() {
+    const span = document.createElement("span");
+    span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    span.style.left = Math.random() * 100 + "vw";
+    span.style.animationDuration = (Math.random()*3+3)+"s";
+    matrix.appendChild(span);
+
+    setTimeout(()=>span.remove(), 5000);
+  }
+
+  setInterval(spawn, 150);
+</script>
 </body>
 </html>
