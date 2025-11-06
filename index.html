@@ -4,33 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Портфолио — Slava Yun</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Привет! Я Slava Yun 👋</h1>
-    <p>Добро пожаловать в моё портфолио.</p>
-    <nav>
-      <a href="#about">Обо мне</a>
-      <a href="#works">Работы</a>
-      <a href="#contact">Контакты</a>
-    </nav>
-  </header>
+<!-- HERO / ГЛАВНЫЙ ЭКРАН -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-wrap">
 
-  <section id="about">
-    <h2>Обо мне</h2>
-    <p>Короткий текст о себе. Кто ты и чем занимаешься.</p>
-  </section>
+      <!-- АВАТАР -->
+      <img src="assets/images/avatar.png" alt="Моё фото" class="avatar">
 
-  <section id="works">
-    <h2>Мои проекты</h2>
-    <p>Сюда добавим проекты позже.</p>
-  </section>
+      <!-- ТЕКСТ -->
+      <div>
+        <h1>Привет! 👋 Я <span>Slava Yun</span></h1>
+        <p class="lead">Делаю веб-проекты. Помогаю людям и бизнесу получать результат.</p>
 
-  <section id="contact">
-    <h2>Контакты</h2>
-    <p>Telegram: <a href="#">@username</a></p>
-  </section>
+        <!-- КНОПКИ ДЕЙСТВИЯ -->
+        <div class="actions">
+          <a class="btn" href="#works">Смотреть проекты</a>
+          <a class="btn btn-ghost" href="#contact">Связаться</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <!-- ОБО МНЕ -->
+<section id="about">
+  <div class="container">
+    <div class="panel">
+      <h2>Обо мне</h2>
+      <p class="lead">
+        Привет! Меня зовут Slava Yun. Я создаю современные, аккуратные и функциональные веб-проекты. 
+        Люблю делать сложные вещи простыми и визуально понятными.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- МОИ ПРОЕКТЫ -->
+<section id="works">
+  <div class="container">
+    <div class="panel">
+      <h2>Мои проекты</h2>
+      <div class="cards">
+        <article class="panel card">
+          <img src="assets/images/project-1.jpg" alt="Проект 1">
+          <div class="body">
+            <h3>Название проекта 1</h3>
+            <p>Создал адаптивный лендинг для клиента. Оптимизировал скорость загрузки и повысил конверсию.</p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">UI Design</span>
+            </div>
+            <p><a href="#" target="_blank" rel="noopener">Смотреть проект →</a></p>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <img src="assets/images/project-2.jpg" alt="Проект 2">
+          <div class="body">
+            <h3>Название проекта 2</h3>
+            <p>Разработал фирменный сайт для малого бизнеса с уникальной айдентикой.</p>
+            <div class="tags">
+              <span class="tag">Branding</span>
+              <span class="tag">Frontend</span>
+            </div>
+            <p><a href="#" target="_blank" rel="noopener">Смотреть проект →</a></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section id="contact">
+  <div class="container">
+    <div class="panel">
+      <h2>Контакты</h2>
+      <ul class="contact">
+        <li>✉️ <a href="mailto:youremail@example.com">youremail@example.com</a></li>
+        <li>💬 <a href="https://t.me/your_telegram" target="_blank" rel="noopener">@your_telegram</a></li>
+        <li>🔗 <a href="https://github.com/SlavaYun" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
   <footer>
     <p>© 2025 Slava Yun</p>
