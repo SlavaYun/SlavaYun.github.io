@@ -9,29 +9,42 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="noise"></div>
+
 <!-- HERO / ГЛАВНЫЙ ЭКРАН -->
+ <div class="hud" style="top:20px; left:20px;">SYS: ONLINE</div>
+<div class="hud" style="top:20px; right:20px;">SIGNAL: STABLE</div>
+<div class="hud" style="bottom:20px; right:20px;">OPERATOR: ACTIVE</div>
+<div class="hud" style="bottom:20px; left:20px;">SCAN MODE: ON</div>
+<div class="hud" style="top:50%; right:18px;">
+  COORD: X32 / Y21
+</div>
+
+
 <header class="hero">
+  <div class="scan-overlay"></div>
+  <div class="grid-overlay"></div>
+
   <div class="container">
     <div class="hero-wrap">
-
-      <!-- АВАТАР -->
       <img src="assets/images/avatar.png" alt="Моё фото" class="avatar">
 
-      <!-- ТЕКСТ -->
-      <div>
-        <h1>Привет! 👋 Я <span>Slava Yun</span></h1>
-        <p class="lead">Делаю веб-проекты. Помогаю людям и бизнесу получать результат.</p>
+      <h1 class="hero-title">
+        Привет! ✋ <span>Я Slava Yun</span>
+      </h1>
 
-        <!-- КНОПКИ ДЕЙСТВИЯ -->
-        <div class="actions">
-          <a class="btn" href="#works">Смотреть проекты</a>
-          <a class="btn btn-ghost" href="#contact">Связаться</a>
-        </div>
+      <p class="lead">
+        Делаю веб-проекты. Помогаю людям и бизнесу получать результат.
+      </p>
+
+      <div class="actions">
+        <a class="btn" href="#works">Смотреть проекты</a>
+        <a class="btn btn-ghost" href="#contact">Связаться</a>
       </div>
-
     </div>
   </div>
 </header>
+
 
 <!-- ОБО МНЕ -->
 <section id="about">
