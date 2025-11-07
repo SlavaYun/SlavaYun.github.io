@@ -17,7 +17,7 @@
 <div class="hud" style="bottom:20px; right:20px;">OPERATOR: ACTIVE</div>
 <div class="hud" style="bottom:20px; left:20px;">SCAN MODE: ON</div>
 <div class="hud" style="top:50%; right:18px;">
-  COORD: <span class="coord">59.9391° N / 30.3158° E</span>
+  COORD: <span class="coord" data-city="Санкт-Петербург">59.9391° N / 30.3158° E</span>
 </div>
 
 
@@ -119,23 +119,26 @@
   <footer>
     <p>© 2025 Slava Yun</p>
   </footer>
-  <script>
-  const matrix = document.querySelector('.matrix');
+<script>
+  const matrix = document.getElementById('matrix');
   const symbols = "SLAVAYUN";
 
   function spawn() {
     const span = document.createElement("span");
     span.style.setProperty("--i", Math.random());
-      // Рандом оттенка — от розового до фиолетового
-    const hue = 280 + Math.random() * 40; // диапазон 280–320 (фиолетово-розовый)
+
+    // оттенок от 280 до 320 — фиолетово-розовые буквы
+    const hue = 280 + Math.random() * 40;
     span.style.color = `hsl(${hue}, 100%, 65%)`;
+
     span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
     span.style.left = Math.random() * 100 + "vw";
-    span.style.animationDuration = (Math.random() * 6 + 2) + "s"; // скорость букв
-    span.style.fontSize = (Math.random() * 10 + 12) + "px"; // разные размеры
-    span.style.opacity = Math.random() * 0.5 + 0.2; // разные уровни яркости
+    span.style.animationDuration = (Math.random() * 6 + 2) + "s";
+    span.style.fontSize = (Math.random() * 10 + 12) + "px";
+    span.style.opacity = Math.random() * 0.5 + 0.2;
+
     matrix.appendChild(span);
-    setTimeout(()=>span.remove(), 5000);
+    setTimeout(() => span.remove(), 5000);
   }
 
   setInterval(spawn, 80);

@@ -395,7 +395,42 @@ filter: drop-shadow(0 0 4px currentColor);
 }
 .coord {
   color: #c400ff;
-  text-shadow: 0 0 6px #c400ff, 0 0 12px #9325db;
   font-weight: 600;
   letter-spacing: 1px;
+  text-shadow:
+    0 0 6px #c400ff,
+    0 0 12px #9325db,
+    0 0 24px rgba(196, 0, 255, 0.6);
+  transition: all 0.3s ease-in-out;
+  cursor: default;
+}
+.coord::after {
+  content: attr(data-city);
+  position: absolute;
+  bottom: 120%;
+  right: 0;
+  background: rgba(20, 0, 30, 0.95);
+  color: #ffb6ff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #c400ff;
+  border-radius: 6px;
+  box-shadow: 0 0 8px #c400ff;
+  opacity: 0;
+  transform: translateY(5px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.coord:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.coord:hover {
+  color: #ff66ff;
+  text-shadow:
+    0 0 8px #ff66ff,
+    0 0 16px #c400ff,
+    0 0 32px rgba(255, 102, 255, 0.8);
 }
