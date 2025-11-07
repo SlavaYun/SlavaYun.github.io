@@ -127,21 +127,51 @@
     const span = document.createElement("span");
     span.style.setProperty("--i", Math.random());
 
-    // оттенок от 280 до 320 — фиолетово-розовые буквы
+    // Случайный фиолетово-розовый оттенок
     const hue = 280 + Math.random() * 40;
     span.style.color = `hsl(${hue}, 100%, 65%)`;
 
     span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-    span.style.left = Math.random() * 100 + "vw";
-    span.style.animationDuration = (Math.random() * 6 + 2) + "s";
-    span.style.fontSize = (Math.random() * 10 + 12) + "px";
+
+    // Рандомная сторона появления
+    const side = Math.floor(Math.random() * 4); // 0=верх, 1=низ, 2=лево, 3=право
+    const size = Math.random() * 10 + 12; // размер
+    const duration = Math.random() * 6 + 4; // скорость
+
+    span.style.fontSize = size + "px";
     span.style.opacity = Math.random() * 0.5 + 0.2;
+    span.style.position = "absolute";
+
+    // Позиции и направления
+    switch (side) {
+      case 0: // сверху вниз
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.top = "-20px";
+        span.style.animation = `fall ${duration}s linear forwards`;
+        break;
+      case 1: // снизу вверх
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.bottom = "-20px";
+        span.style.animation = `rise ${duration}s linear forwards`;
+        break;
+      case 2: // слева направо
+        span.style.top = Math.random() * 100 + "vh";
+        span.style.left = "-20px";
+        span.style.animation = `flyRight ${duration}s linear forwards`;
+        break;
+      case 3: // справа налево
+        span.style.top = Math.random() * 100 + "vh";
+        span.style.right = "-20px";
+        span.style.animation = `flyLeft ${duration}s linear forwards`;
+        break;
+    }
 
     matrix.appendChild(span);
-    setTimeout(() => span.remove(), 5000);
+    setTimeout(() => span.remove(), duration * 1000);
   }
 
-  setInterval(spawn, 80);
+  // Генерация
+  setInterval(spawn, 100);
 </script>
 </body>
 </html>
