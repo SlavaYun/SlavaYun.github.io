@@ -33,7 +33,6 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 /* ===== HERO (шапка) ===== */
 .hero {
   position: relative;
-  background: #0d1117; /* единый фон */
   padding: 80px 0 100px;
   text-align: center;
   overflow: hidden;
@@ -72,17 +71,6 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 @keyframes riseUp {
   from { bottom: -20px; }
   to   { bottom: 110%; }
-}
-@keyframes scanY {
-  0%   { top: 100%; }
-  100% { top: 0%; }
-}
-@keyframes scanX {
-  0%   { left: 0%; animation-timing-function: ease-in; }
-  25%  { left: 40%; animation-timing-function: ease-out; }
-  50%  { left: 100%; animation-timing-function: ease-in; }
-  75%  { left: 60%; animation-timing-function: ease-out; }
-  100% { left: 0%; }
 }
 
 /* ==== ЛУЧИ (вертикальный + горизонтальный) ==== */
@@ -378,14 +366,6 @@ background-position: center;
 
 /* --- AR HUD MARKERS --- */
 
-#matrix {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 2; /* ниже текста и кнопок */
-}
-
 #matrix span {
   position: absolute;
   bottom: -20px;
@@ -473,7 +453,7 @@ background-position: center;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 10;
 }
 
 /* — лёгкое дрожание (электромагнитные колебания) — */
@@ -493,10 +473,6 @@ background-position: center;
   65%     { opacity:.90; filter:brightness(2.8) contrast(2.1); }
   80%     { opacity:.80; filter:brightness(2.4) contrast(1.9); }
 }
-@keyframes infoFlicker{
-  0%,100% { opacity:.95; filter:brightness(2); }
-  50%     { opacity:.75; filter:brightness(3); }
-}
 
 /* — послесвечение / дыхание — */
 
@@ -506,18 +482,7 @@ background-position: center;
 }
 
 /* — подсветка Saint P при наведении — */
-.hud .coord:hover {
-  pointer-events: all;
-  cursor: pointer;
-  color: #00ffff;
-  text-shadow:
-    0 0 10px #00ffff,
-    0 0 25px #00ffff,
-    0 0 50px #00e5ff,
-    0 0 100px #00ffff;
-  filter: brightness(4) contrast(3);
-  animation: coordHoverPulse 2s ease-in-out infinite;
-}
+
 @keyframes coordHoverPulse {
   0%, 100% { opacity: 1; transform: scale(1); filter: blur(0); }
   50% { opacity: 0.9; transform: scale(1.05); filter: blur(1px); }
@@ -529,7 +494,7 @@ background-position: center;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 999999;
+  z-index: 20;
   overflow: visible;
 }
 
@@ -548,65 +513,68 @@ background-position: center;
     0 0 12px rgba(0,255,255,0.6);
   mix-blend-mode: screen;
 }
-/* === КООРДИНАТЫ (постоянно видимые, в правом верхнем углу) === */
+/* --- Координаты (правый верхний угол, идеальное выравнивание) --- */
 .hud .coord {
   position: absolute;
-  top: 14px;
-  right: 20px;
-  white-space: nowrap; /* одна строка */
-  z-index: 3000;
-  pointer-events: none;
+  /* Делаем лёгкий отступ от края окна, чтобы не прилипали */
+  top: calc(env(safe-area-inset-top, 0px) + 22px);
+  right: calc(env(safe-area-inset-right, 0px) + 250px);
+
+  /* Запрещаем перенос, выравниваем по линии других HUD-элементов */
+  white-space: nowrap;
+  line-height: 1;
+  z-index: 30;
+  pointer-events: auto;
 }
 
+/* Видимая строка координат */
 .hud .coord-hit {
   display: inline-block;
   font-family: 'Share Tech Mono', monospace;
   font-size: clamp(13px, 1.4vw, 15px);
-  color: #00eaff;
   letter-spacing: 1px;
+  color: #00eaff;
+
+  /* Включаем читаемость на любом фоне: отключаем screen и даём лёгкую тёмную кайму */
+  mix-blend-mode: normal !important;  /* перекрываем .hud span { mix-blend-mode: screen } */
   text-shadow:
-    0 0 2px rgba(0,0,0,0.6),
+    0 0 2px rgba(0,0,0,0.60),        /* тёмная обводка — контраст */
     0 0 6px #00ffff,
     0 0 18px #00eaff,
     0 0 32px #00ffff;
+
+  /* “Жизнь” в стиле HUD — мягкое дыхание и лёгкое дрожание */
   animation: coordPulse 3s ease-in-out infinite, coordShake 8s infinite;
+  cursor: pointer;
 }
 
-/* === ВСПЛЫВАЮЩАЯ ПАНЕЛЬ С ИНФО === */
-.coord-info {
+/* Всплывающая карточка с деталями (город, страна, и т.п.) */
+.hud .coord .coord-info {
   position: absolute;
-  top: 120%;
+  top: 120%;               /* под строкой координат */
   right: 0;
-  background: rgba(5, 8, 20, 0.88);
-  border: 1px solid #00eaff;
-  border-radius: 6px;
+  transform: translateY(4px);
+  opacity: 0;
+  pointer-events: none;    /* клики не перехватывает, только показывает */
+  z-index: 40;           /* поверх всего HUD */
+
   padding: 8px 12px;
   font-size: 13px;
   color: #e6ffff;
+  border-radius: 6px;
+
+  background: rgba(5, 8, 20, 0.88);
+  border: 1px solid #00eaff;
   box-shadow: 0 0 8px #00ffff;
   backdrop-filter: blur(6px);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity .3s ease, transform .3s ease;
-  pointer-events: none;
-}
 
-/* === ПОКАЗ ПРИ НАВЕДЕНИИ === */
+  transition: opacity .3s ease, transform .3s ease;
+  }
+
+/* --- Активация при наведении --- */
 .hud .coord:hover .coord-info {
   opacity: 1;
   transform: translateY(0);
-}
-/* — даём координатам принимать hover, родитель HUD остаётся не кликабельным — */
-.hud .coord {
-  pointer-events: auto;   /* было: none */
+  pointer-events: auto;
 }
 
-/* — выключаем смешивание для текста координат, чтобы всегда читаемо — */
-.hud .coord-hit {
-  mix-blend-mode: normal !important;  /* перекрываем .hud span */
-}
-
-/* — на всякий: всплывашка поверх любых лучей/матрицы — */
-.hud .coord-info {
-  z-index: 4000;
-}
