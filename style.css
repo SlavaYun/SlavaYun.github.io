@@ -217,23 +217,35 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
   98% { filter: contrast(180%) brightness(140%); }
   99% { filter: blur(1px) sepia(30%); }
 }
-/* === MATRIX GLITCH SYMBOLS === */
+/* === Матрица в зоне аватара === */
+.hero-wrap {
+  position: relative;
+  z-index: 5; /* создаёт локальную область */
+}
+
 .matrix {
-  pointer-events: none;
   position: absolute;
   inset: 0;
   overflow: hidden;
-  z-index: 2;
+  pointer-events: none;
+  z-index: 2; /* ниже текста и кнопок */
 }
 
 .matrix span {
   position: absolute;
   bottom: -20px;
   font-size: 16px;
-  color: #c400ff; /* фиолетовый */
+  color: #c400ff; /* фиолетовый неон */
   opacity: 0.35;
   font-family: monospace;
-  animation: rise 4s linear infinite;
+  animation: rise 4s linear infinite, pulseGlow 3s ease-in-out infinite;
+  z-index: 2;
+  text-shadow:
+    0 0 6px #c400ff,
+    0 0 12px #c400ff,
+    0 0 24px #9325db;
+  animation-delay: calc(var(--i) * 0.3s);
+filter: drop-shadow(0 0 4px currentColor);
 }
 
 @keyframes rise {
@@ -253,4 +265,20 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
 .hero * {
   position: relative;
   z-index: 10;
+}
+@keyframes pulseGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 4px #c400ff,
+      0 0 10px #c400ff,
+      0 0 20px #9325db;
+    opacity: 0.35;
+  }
+  50% {
+    text-shadow:
+      0 0 8px #c400ff,
+      0 0 20px #c400ff,
+      0 0 40px #9325db;
+    opacity: 0.55;
+  }
 }

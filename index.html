@@ -22,12 +22,12 @@
 
 
 <header class="hero">
-  <div class="matrix-zone"></div>
   <div class="scan-overlay"></div>
   <div class="grid-overlay"></div>
 
   <div class="container">
     <div class="hero-wrap">
+      <div class="matrix"></div>
       <img src="assets/images/avatar.png" alt="Моё фото" class="avatar">
 
       <h1 class="hero-title">
@@ -85,15 +85,20 @@
   </footer>
   <script>
   const matrix = document.querySelector('.matrix');
-  const symbols = "カタカナ01☷☲☵☶アビスネクロ✦ΔΞΨΣ☢☣";
+  const symbols = "SLAVAYUN";
 
   function spawn() {
     const span = document.createElement("span");
+    span.style.setProperty("--i", Math.random());
+      // Рандом оттенка — от розового до фиолетового
+    const hue = 280 + Math.random() * 40; // диапазон 280–320 (фиолетово-розовый)
+    span.style.color = `hsl(${hue}, 100%, 65%)`;
     span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
     span.style.left = Math.random() * 100 + "vw";
-    span.style.animationDuration = (Math.random()*5+2)+"s";
+    span.style.animationDuration = (Math.random() * 6 + 2) + "s"; // скорость букв
+    span.style.fontSize = (Math.random() * 10 + 12) + "px"; // разные размеры
+    span.style.opacity = Math.random() * 0.5 + 0.2; // разные уровни яркости
     matrix.appendChild(span);
-
     setTimeout(()=>span.remove(), 5000);
   }
 
