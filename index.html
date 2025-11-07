@@ -22,7 +22,13 @@
 
 
 <header class="hero">
-  <!-- МАТРИЦА ВНЕ .hero-wrap, чтобы занять всю ширину шапки -->
+  <!-- сетка -->
+  <div class="grid-overlay"></div>
+
+  <!-- фиолетовый сканирующий луч -->
+  <div class="scan-overlay"></div>
+
+  <!-- матрица — теперь с буквами по всей ширине -->
   <div id="matrix"></div>
 
   <div class="container">
@@ -38,6 +44,35 @@
   </div>
 </header>
 
+<script>
+  // МАТРИЦА
+  const matrix = document.getElementById('matrix');
+  const symbols = "SLAVAYUN";
+
+  function spawn() {
+    const span = document.createElement('span');
+    span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    span.style.left = Math.random() * 100 + "vw";
+    span.style.bottom = "-20px";
+
+    // случайные параметры
+    span.style.fontSize = (12 + Math.random() * 14) + "px";
+    span.style.opacity = (0.3 + Math.random() * 0.6).toFixed(2);
+
+    // немного 3D
+    span.style.setProperty('--rx', Math.random() * 15 - 7 + 'deg');
+    span.style.setProperty('--ry', Math.random() * 15 - 7 + 'deg');
+
+    const duration = (6 + Math.random() * 6).toFixed(1);
+    span.style.animation = `riseUp ${duration}s linear forwards, pulseGlow 3s ease-in-out infinite, tilt 5s ease-in-out infinite`;
+
+    matrix.appendChild(span);
+    setTimeout(() => span.remove(), duration * 1000);
+  }
+
+  // равномерный поток
+  setInterval(spawn, 90);
+</script>
 
 <!-- ОБО МНЕ -->
 <section id="about">
