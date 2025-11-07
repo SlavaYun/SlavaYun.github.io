@@ -165,7 +165,9 @@
         span.style.animation = `flyLeft ${duration}s linear forwards`;
         break;
     }
-
+// Случайное вращение по осям для 3D эффекта
+span.style.setProperty("--rx", Math.random() * 360 + "deg");
+span.style.setProperty("--ry", Math.random() * 360 + "deg");
     matrix.appendChild(span);
     setTimeout(() => span.remove(), duration * 1000);
   }

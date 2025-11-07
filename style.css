@@ -34,6 +34,73 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 .hero{background:#3a3a3a; color:#fff; padding:72px 0; text-align:center;}
 .hero .container{padding-top:0; padding-bottom:0}
 .hero-wrap{max-width:720px; margin:0 auto;}
+/* === МАТРИЦА И ЛУЧ В ШАПКЕ === */
+
+/* Слои в шапке */
+.hero { position: relative; }
+.hero-wrap { position: relative; z-index: 5; }
+
+/* Область с анимацией букв */
+#matrix {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Символы */
+#matrix span {
+  position: absolute;
+  color: #c400ff;
+  font-family: monospace;
+  opacity: 0.35;
+  text-shadow:
+    0 0 6px  #c400ff,
+    0 0 12px #c400ff,
+    0 0 24px #9325db;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Движение символа (вектор задаётся из JS) */
+@keyframes move {
+  to {
+    transform: translate(var(--dx, 0), var(--dy, 0));
+  }
+}
+
+/* Пульс свечения */
+@keyframes pulseGlow {
+  0%,100% {
+    text-shadow: 0 0 6px #c400ff, 0 0 12px #c400ff, 0 0 24px #9325db;
+    opacity: 0.35;
+  }
+  50% {
+    text-shadow: 0 0 8px #c400ff, 0 0 16px #c400ff, 0 0 32px #ff66ff;
+    opacity: 0.55;
+  }
+}
+
+/* Луч-сканер */
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+background: linear-gradient(
+  to bottom,
+  rgba(196, 0, 255, 0) 0%,
+  rgba(196, 0, 255, 0.55) 50%,
+  rgba(196, 0, 255, 0) 100%
+);
+  filter: drop-shadow(0 0 8px rgba(196, 0, 255, 0.6));
+  mix-blend-mode: screen;
+  animation: scan 6s linear infinite;
+  z-index: 1;
+}
+
+@keyframes scan {
+  0%   { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
 /* ключевой момент — делаем аватар адекватного размера */
 .hero .avatar{
   width:160px; height:160px; border-radius:50%;
@@ -346,17 +413,19 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
   position: absolute;
   bottom: -20px;
   font-size: 16px;
-  color: #c400ff; /* фиолетовый неон */
+  color: #c400ff;
   opacity: 0.35;
   font-family: monospace;
-  animation: rise 4s linear infinite, pulseGlow 3s ease-in-out infinite;
-  z-index: 2;
   text-shadow:
     0 0 6px #c400ff,
     0 0 12px #c400ff,
     0 0 24px #9325db;
-  animation-delay: calc(var(--i) * 0.3s);
-filter: drop-shadow(0 0 4px currentColor);
+  filter: drop-shadow(0 0 4px currentColor);
+
+  /* 🔥 3D глубина */
+  transform-style: preserve-3d;
+  transform: translateZ(0) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  animation: move 6s linear infinite, pulseGlow 3s ease-in-out infinite, tilt 5s ease-in-out infinite;
 }
 
 @keyframes rise {
@@ -382,6 +451,11 @@ filter: drop-shadow(0 0 4px currentColor);
 @keyframes flyLeft {
   0% { transform: translateX(0) scale(1); opacity: 0.3; }
   100% { transform: translateX(-110vw) scale(1.2); opacity: 0.9; }
+}
+@keyframes tilt {
+  0% { transform: translateZ(0) rotateX(var(--rx)) rotateY(var(--ry)); }
+  50% { transform: translateZ(20px) rotateX(calc(var(--rx) + 10deg)) rotateY(calc(var(--ry) - 10deg)); }
+  100% { transform: translateZ(0) rotateX(var(--rx)) rotateY(var(--ry)); }
 }
 .panel {
   position: relative;
