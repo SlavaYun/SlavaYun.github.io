@@ -81,20 +81,21 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
   background: linear-gradient(
       to top,
       rgba(196, 0, 255, 0) 0%,
-      rgba(196, 0, 255, 0.65) 50%,
+      rgba(196, 0, 255, 0.4) 48%,
+      rgba(196, 0, 255, 0.4) 52%,
       rgba(196, 0, 255, 0) 100%
   );
-  filter: drop-shadow(0 0 18px rgba(196, 0, 255, 0.9));
+  filter: drop-shadow(0 0 10px rgba(196, 0, 255, 0.7));
   mix-blend-mode: screen;
-  opacity: 0.6;
+  opacity: 0.5;
   animation: scan 5s linear infinite;
   pointer-events: none;
   z-index: 1;
 }
 
 @keyframes scan {
-  0% { transform: translateY(120%); }
-  100% { transform: translateY(-120%); }
+  0%, 100% { transform: translateY(100%); }
+  50% { transform: translateY(-100%); }
 }
 
 @keyframes scan {
