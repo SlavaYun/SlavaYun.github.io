@@ -31,9 +31,22 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 .lead{color:var(--muted); margin:0}
 
 /* ===== HERO (шапка) ===== */
-.hero{background:#3a3a3a; color:#fff; padding:72px 0; text-align:center;}
-.hero .container{padding-top:0; padding-bottom:0}
-.hero-wrap{max-width:720px; margin:0 auto;}
+.hero {
+  position: relative;
+  background: #0d1117; /* единый фон */
+  padding: 80px 0 100px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.hero-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
 /* === МАТРИЦА И ЛУЧ В ШАПКЕ === */
 
 /* Слои в шапке */
@@ -41,44 +54,24 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 .hero-wrap { position: relative; z-index: 5; }
 
 /* Область с анимацией букв */
-#matrix {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 2;
+#matrix{
+  position:absolute;
+  inset:0;               /* top:0 right:0 bottom:0 left:0 */
+  pointer-events:none;
+  overflow:hidden;
+  z-index:2;             /* ниже текста/кнопок, но выше фона */
+}
+/* Контент поверх матрицы */
+.hero .container,
+.hero .hero-wrap{
+  position:relative;
+  z-index:5;
 }
 
-/* Символы */
-#matrix span {
-  position: absolute;
-  color: #c400ff;
-  font-family: monospace;
-  opacity: 0.35;
-  text-shadow:
-    0 0 6px  #c400ff,
-    0 0 12px #c400ff,
-    0 0 24px #9325db;
-  filter: drop-shadow(0 0 4px currentColor);
-}
-
-/* Движение символа (вектор задаётся из JS) */
-@keyframes move {
-  to {
-    transform: translate(var(--dx, 0), var(--dy, 0));
-  }
-}
-
-/* Пульс свечения */
-@keyframes pulseGlow {
-  0%,100% {
-    text-shadow: 0 0 6px #c400ff, 0 0 12px #c400ff, 0 0 24px #9325db;
-    opacity: 0.35;
-  }
-  50% {
-    text-shadow: 0 0 8px #c400ff, 0 0 16px #c400ff, 0 0 32px #ff66ff;
-    opacity: 0.55;
-  }
+/* Ровный подъём снизу-вверх на всю высоту шапки */
+@keyframes riseUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(-120vh); }
 }
 
 /* Луч-сканер */
@@ -421,37 +414,11 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
     0 0 12px #c400ff,
     0 0 24px #9325db;
   filter: drop-shadow(0 0 4px currentColor);
-
-  /* 🔥 3D глубина */
   transform-style: preserve-3d;
   transform: translateZ(0) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  animation: move 6s linear infinite, pulseGlow 3s ease-in-out infinite, tilt 5s ease-in-out infinite;
+animation: riseUp 8s linear forwards, pulseGlow 3s ease-in-out infinite, tilt 5s ease-in-out infinite;
 }
 
-@keyframes rise {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.1;
-  }
-  100% {
-    transform: translateY(-120vh) scale(1.3);
-    opacity: 0.9;
-  }
-}
-@keyframes fall {
-  0% { transform: translateY(-10vh) scale(1); opacity: 0.2; }
-  100% { transform: translateY(120vh) scale(1.3); opacity: 0.9; }
-}
-
-@keyframes flyRight {
-  0% { transform: translateX(0) scale(1); opacity: 0.3; }
-  100% { transform: translateX(110vw) scale(1.2); opacity: 0.9; }
-}
-
-@keyframes flyLeft {
-  0% { transform: translateX(0) scale(1); opacity: 0.3; }
-  100% { transform: translateX(-110vw) scale(1.2); opacity: 0.9; }
-}
 @keyframes tilt {
   0% { transform: translateZ(0) rotateX(var(--rx)) rotateY(var(--ry)); }
   50% { transform: translateZ(20px) rotateX(calc(var(--rx) + 10deg)) rotateY(calc(var(--ry) - 10deg)); }
@@ -460,10 +427,6 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
 .panel {
   position: relative;
   z-index: 5;
-}
-.hero * {
-  position: relative;
-  z-index: 10;
 }
 @keyframes pulseGlow {
   0%, 100% {

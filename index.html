@@ -22,22 +22,14 @@
 
 
 <header class="hero">
-  <div class="scan-overlay"></div>
-  <div class="grid-overlay"></div>
+  <!-- МАТРИЦА ВНЕ .hero-wrap, чтобы занять всю ширину шапки -->
+  <div id="matrix"></div>
 
   <div class="container">
     <div class="hero-wrap">
-      <div id="matrix"></div>
       <img src="assets/images/avatar.png" alt="Моё фото" class="avatar">
-
-      <h1 class="hero-title">
-        Привет! ✋ <span>Я Slava Yun</span>
-      </h1>
-
-      <p class="lead">
-        Делаю веб-проекты. Помогаю людям и бизнесу получать результат.
-      </p>
-
+      <h1 class="hero-title">Привет!  <span>Я Slava Yun</span></h1>
+      <p class="lead">Делаю веб-проекты. Помогаю людям и бизнесу получать результат.</p>
       <div class="actions">
         <a class="btn" href="#works">Смотреть проекты</a>
         <a class="btn btn-ghost" href="#contact">Связаться</a>
@@ -120,60 +112,39 @@
     <p>© 2025 Slava Yun</p>
   </footer>
 <script>
+  // 1) Берём матрицу
   const matrix = document.getElementById('matrix');
+  // Только нужные буквы
   const symbols = "SLAVAYUN";
 
-  function spawn() {
-    const span = document.createElement("span");
-    span.style.setProperty("--i", Math.random());
+  function spawn(){
+    const span = document.createElement('span');
 
-    // Случайный фиолетово-розовый оттенок
-    const hue = 280 + Math.random() * 40;
-    span.style.color = `hsl(${hue}, 100%, 65%)`;
-
+    // Берём букву
     span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
 
-    // Рандомная сторона появления
-    const side = Math.floor(Math.random() * 4); // 0=верх, 1=низ, 2=лево, 3=право
-    const size = Math.random() * 10 + 12; // размер
-    const duration = Math.random() * 6 + 4; // скорость
+    // Случайная X-позиция на всю ширину шапки
+    span.style.left = Math.random() * 100 + "vw";
 
-    span.style.fontSize = size + "px";
-    span.style.opacity = Math.random() * 0.5 + 0.2;
-    span.style.position = "absolute";
+    // Старт строго снизу (за нижней границей — будет вылетать вверх)
+    span.style.bottom = "-20px";
 
-    // Позиции и направления
-    switch (side) {
-      case 0: // сверху вниз
-        span.style.left = Math.random() * 100 + "vw";
-        span.style.top = "-20px";
-        span.style.animation = `fall ${duration}s linear forwards`;
-        break;
-      case 1: // снизу вверх
-        span.style.left = Math.random() * 100 + "vw";
-        span.style.bottom = "-20px";
-        span.style.animation = `rise ${duration}s linear forwards`;
-        break;
-      case 2: // слева направо
-        span.style.top = Math.random() * 100 + "vh";
-        span.style.left = "-20px";
-        span.style.animation = `flyRight ${duration}s linear forwards`;
-        break;
-      case 3: // справа налево
-        span.style.top = Math.random() * 100 + "vh";
-        span.style.right = "-20px";
-        span.style.animation = `flyLeft ${duration}s linear forwards`;
-        break;
-    }
-// Случайное вращение по осям для 3D эффекта
-span.style.setProperty("--rx", Math.random() * 360 + "deg");
-span.style.setProperty("--ry", Math.random() * 360 + "deg");
+    // Немного случайностей: размер, яркость, скорость
+    span.style.fontSize = (10 + Math.random() * 12) + "px";     // 10–22px
+    span.style.opacity  = (0.5 + Math.random() * 0.3).toFixed(2);
+    const duration = (5 + Math.random() * 6).toFixed(2);        // 5–11 c
+
+    // Только один тип движения — ровный подъём
+    span.style.animation = `riseUp ${duration}s linear forwards, pulseGlow 3s ease-in-out infinite`;
+
+    // Добавляем в DOM и удаляем после анимации
     matrix.appendChild(span);
-    setTimeout(() => span.remove(), duration * 1000);
+    setTimeout(()=> span.remove(), duration * 1000);
   }
 
-  // Генерация
-  setInterval(spawn, 100);
+  // Частота спавна (регулируй плотность)
+  setInterval(spawn, 90);
 </script>
+
 </body>
 </html>
