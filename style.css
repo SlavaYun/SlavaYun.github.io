@@ -377,21 +377,6 @@ background-position: center;
 }
 
 /* --- AR HUD MARKERS --- */
-.hud {
-  position: absolute;
-  font-size: 12px;
-  color: rgba(8, 232, 217, 0.45);
-  letter-spacing: 2px;
-  pointer-events: none;
-  text-transform: uppercase;
-  mix-blend-mode: lighten;
-}
-
-/* === Матрица в зоне аватара === */
-.hero-wrap {
-  position: relative;
-  z-index: 5; /* создаёт локальную область */
-}
 
 #matrix {
   position: absolute;
@@ -464,30 +449,6 @@ background-position: center;
       0 0 70px rgba(0, 255, 255, 1);
   }
 }
-.hero .coord {
-  position: fixed;
-  right: 25px;
-  bottom: 15px;
-
-  color: #bafaff; /* яркий голубой */
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 2px;
-
-  /* делаем лёгкий неон */
-  text-shadow:
-    0 0 8px #bafaff,
-    0 0 16px #00e5ff,
-    0 0 32px #00e5ff,
-    0 0 64px #00ffff;
-
-  z-index: 99999999 !important;
-  pointer-events: none;
-  mix-blend-mode: lighten !important;
-  opacity: 1;
-
-  /* создаём свечение через before */
-}
 
 /* анимация мягкого дыхания */
 @keyframes glowPulse {
@@ -501,158 +462,11 @@ background-position: center;
   }
 }
 
-.coord::after {
-  content: attr(data-city);
-  position: absolute;
-  bottom: 120%;
-  right: 0;
-  background: rgba(20, 0, 30, 0.95);
-  color: #ffb6ff;
-  font-size: 12px;
-  padding: 4px 8px;
-  border: 1px solid #c400ff;
-  border-radius: 6px;
-  box-shadow: 0 0 8px #c400ff;
-  opacity: 0;
-  transform: translateY(5px);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-
-.coord:hover::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.coord:hover {
-  color: #ff66ff;
-  text-shadow:
-    0 0 8px #ff66ff,
-    0 0 16px #c400ff,
-    0 0 32px rgba(255, 102, 255, 0.8);
-}
-/* === HUD общие системные надписи === */
-.hud span {
-  position: absolute;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  color: rgba(0, 255, 255, 0.8);
-  letter-spacing: 1px;
-  mix-blend-mode: screen;
-  text-shadow: 
-    0 0 5px rgba(0, 255, 255, 0.8),
-    0 0 10px rgba(0, 255, 255, 0.6),
-    0 0 20px rgba(0, 255, 255, 0.4);
-  z-index: 1000;
-}
-/* — лёгкое дыхание системных меток — */
-.hud .sys, 
-.hud .signal, 
-.hud .scan, 
-.hud .operator {
-  animation: hudBreath 6s ease-in-out infinite, hudBlink 3.5s infinite ease-in-out;
-}
-
-@keyframes hudBreath {
-  0%, 100% { opacity: 0.9; filter: brightness(1) contrast(1.2); }
-  50% { opacity: 1; filter: brightness(1.4) contrast(1.5); }
-}
-
-@keyframes hudBlink {
-  0%, 100% { text-shadow: 0 0 6px rgba(0,255,255,0.8), 0 0 10px rgba(0,255,255,0.6); }
-  48% { text-shadow: 0 0 4px rgba(0,255,255,0.5); }
-  50% { text-shadow: 0 0 10px rgba(0,255,255,0.8), 0 0 20px rgba(0,255,255,0.6); }
-  52% { text-shadow: 0 0 6px rgba(0,255,255,0.5); }
-}
-
-/* позиции для каждой метки */
-.hud .sys { top: 10px; left: 15px; }
-.hud .signal { top: 10px; right: 25px; }
-.hud .scan { bottom: 15px; left: 15px; }
-.hud .operator { bottom: 15px; right: 25px; }
-
-/* === COORD: живой неон-индикатор === */
-.hud .coord {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #bafaff;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  z-index: 100000000 !important;
-  cursor: pointer;
-  display: inline-block;
-  padding: 0 4px;
-  line-height: 1;
-  mix-blend-mode: screen !important;
-  filter: brightness(3) contrast(2);
-  animation: coordFlicker 4s infinite ease-in-out, coordShake 6s infinite ease-in-out;
-  text-shadow:
-    0 0 6px #bafaff,
-    0 0 12px #00eaff,
-    0 0 24px #00ffff;
-  pointer-events: auto;
-}
-
-/* === INFO POPUP для координат === */
-.coord-info {
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(5, 8, 20, 0.85);
-  backdrop-filter: blur(4px);
-  border: 1px solid #00eaff;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #e6faff;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 3px #00eaff, 0 0 6px rgba(0, 234, 255, 0.6);
-  box-shadow: 0 0 12px rgba(0, 234, 255, 0.5);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 1000000 ;
-  overflow: hidden;
-  pointer-events: none;
-}
-.coord:hover .coord-info {
-  opacity: 1;
-  transform: translate(-50%, -5px);
-}
-
-/* эффект при наведении */
-.coord:hover .coord-info {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-5px);
-}
-
-/* лёгкое мерцание подсказки */
-.coord:hover .coord-info {
-  animation: infoFlicker 1.5s infinite ease-in-out;
-}
-
 @keyframes infoFlicker {
   0%, 100% { opacity: 0.95; filter: brightness(2); }
   50% { opacity: 0.7; filter: brightness(3); }
 }
 
-.hud {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-}
-
-.hud .coord {
-  pointer-events: auto;
-}
 .hero-hud {
   position: absolute;
   inset: 0;
@@ -663,23 +477,25 @@ background-position: center;
 }
 
 /* — лёгкое дрожание (электромагнитные колебания) — */
-@keyframes coordShake {
-  0%, 100%   { transform: translate(0, 0) rotate(0deg); }
-  20%        { transform: translate(0.5px, -0.5px) rotate(-0.2deg); }
-  40%        { transform: translate(-1px, 0.5px) rotate(0.3deg); }
-  60%        { transform: translate(0.5px, 1px) rotate(-0.1deg); }
-  80%        { transform: translate(-0.5px, -0.5px) rotate(0.2deg); }
+@keyframes coordShake{
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  20%     { transform: translate(0.5px,-0.5px) rotate(-0.2deg); }
+  40%     { transform: translate(-1px,0.5px)  rotate(0.3deg);  }
+  60%     { transform: translate(0.5px,1px)   rotate(-0.1deg); }
+  80%     { transform: translate(-0.5px,-0.5px) rotate(0.2deg); }
 }
-
-/* — случайное мерцание яркости / контраста — */
-@keyframes coordFlicker {
-  0%, 100% { opacity: 1; filter: brightness(3) contrast(2); }
-  10% { opacity: 0.85; filter: brightness(2.5) contrast(2.2); }
-  20% { opacity: 0.95; filter: brightness(3.2) contrast(2.5); }
-  35% { opacity: 0.7; filter: brightness(2.2) contrast(1.8); }
-  50% { opacity: 1; filter: brightness(3.5) contrast(2.8); }
-  65% { opacity: 0.9; filter: brightness(2.8) contrast(2.1); }
-  80% { opacity: 0.8; filter: brightness(2.4) contrast(1.9); }
+@keyframes coordFlicker{
+  0%,100% { opacity:1;   filter:brightness(3) contrast(2); }
+  10%     { opacity:.85; filter:brightness(2.5) contrast(2.2); }
+  20%     { opacity:.95; filter:brightness(3.2) contrast(2.5); }
+  35%     { opacity:.70; filter:brightness(2.2) contrast(1.8); }
+  50%     { opacity:1;   filter:brightness(3.5) contrast(2.8); }
+  65%     { opacity:.90; filter:brightness(2.8) contrast(2.1); }
+  80%     { opacity:.80; filter:brightness(2.4) contrast(1.9); }
+}
+@keyframes infoFlicker{
+  0%,100% { opacity:.95; filter:brightness(2); }
+  50%     { opacity:.75; filter:brightness(3); }
 }
 
 /* — послесвечение / дыхание — */
@@ -731,4 +547,66 @@ background-position: center;
     0 0 6px rgba(0,255,255,0.8),
     0 0 12px rgba(0,255,255,0.6);
   mix-blend-mode: screen;
+}
+/* === КООРДИНАТЫ (постоянно видимые, в правом верхнем углу) === */
+.hud .coord {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  white-space: nowrap; /* одна строка */
+  z-index: 3000;
+  pointer-events: none;
+}
+
+.hud .coord-hit {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: #00eaff;
+  letter-spacing: 1px;
+  text-shadow:
+    0 0 2px rgba(0,0,0,0.6),
+    0 0 6px #00ffff,
+    0 0 18px #00eaff,
+    0 0 32px #00ffff;
+  animation: coordPulse 3s ease-in-out infinite, coordShake 8s infinite;
+}
+
+/* === ВСПЛЫВАЮЩАЯ ПАНЕЛЬ С ИНФО === */
+.coord-info {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: rgba(5, 8, 20, 0.88);
+  border: 1px solid #00eaff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #e6ffff;
+  box-shadow: 0 0 8px #00ffff;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+}
+
+/* === ПОКАЗ ПРИ НАВЕДЕНИИ === */
+.hud .coord:hover .coord-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* — даём координатам принимать hover, родитель HUD остаётся не кликабельным — */
+.hud .coord {
+  pointer-events: auto;   /* было: none */
+}
+
+/* — выключаем смешивание для текста координат, чтобы всегда читаемо — */
+.hud .coord-hit {
+  mix-blend-mode: normal !important;  /* перекрываем .hud span */
+}
+
+/* — на всякий: всплывашка поверх любых лучей/матрицы — */
+.hud .coord-info {
+  z-index: 4000;
 }
