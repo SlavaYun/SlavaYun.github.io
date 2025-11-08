@@ -51,74 +51,34 @@
 </header>
 
 
-<!-- ОБО МНЕ -->
-<section id="about">
-  <div class="container about-card">
+<main class="cyber-scroll">
+  <div class="edge-zone left-edge"></div>
+  <div class="edge-zone right-edge"></div>
+  <!-- ОБО МНЕ -->
+  <section class="panel about" data-index="0">
     <h2>Обо мне</h2>
+    <p>Я создаю цифровые интерфейсы будущего, где код — это искусство.</p>
+  </section>
 
-    <div class="about-grid">
-      <div class="about-text">
-        <p>
-          Я создаю быстрые и аккуратные веб-проекты с акцентом на UX и чистый код. 
-          Люблю превращать сложные задачи в понятные интерфейсы и добиваться измеримого результата.
-        </p>
+  <section class="panel skills" data-index="1">
+    <h2>Навыки</h2>
+    <ul>
+      <li>Frontend: HTML, CSS, JavaScript</li>
+      <li>Backend: Node.js, Python</li>
+      <li>AI & Automation: GPT, Neural APIs</li>
+    </ul>
+  </section>
 
-        <ul class="badges">
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>UI&nbsp;Design</li>
-          <li>Лендинги</li>
-          <li>Анимации</li>
-        </ul>
+  <section class="panel projects" data-index="2">
+    <h2>Проекты</h2>
+    <p>Каждый проект — это новая система, новая эволюция.</p>
+  </section>
 
-        <div class="about-actions">
-          <a class="btn" href="#works">Проекты</a>
-          <a class="btn btn-ghost" href="#contact">Связаться</a>
-        </div>
-      </div>
-
-      <div class="about-meta">
-        <div class="stat">
-          <span class="num">∞</span>
-          <span class="label">Идей</span>
-        </div>
-        <div class="stat">
-          <span class="num">1.0</span>
-          <span class="label">Пиксель-перфект</span>
-        </div>
-        <div class="stat">
-          <span class="num">24/7</span>
-          <span class="label">На связи</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- — МОИ ПРОЕКТЫ — -->
-<section id="works">
-  <div class="container">
-    <div class="panel">
-      <h2>Мои проекты</h2>
-      <p>Тут скоро появятся классные работы 😎</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- КОНТАКТЫ -->
-<section id="contact">
-  <div class="container">
-    <div class="panel">
-      <h2>Контакты</h2>
-      <ul class="contact">
-        <li>✉️ <a href="mailto:youremail@example.com">youremail@example.com</a></li>
-        <li>💬 <a href="https://t.me/your_telegram" target="_blank" rel="noopener">@your_telegram</a></li>
-        <li>🔗 <a href="https://github.com/SlavaYun" target="_blank" rel="noopener">GitHub</a></li>
-      </ul>
-    </div>
-  </div>
-</section>
+  <section class="panel contacts" data-index="3">
+    <h2>Контакты</h2>
+    <p>Связь доступна через защищённый канал.</p>
+  </section>
+</main>
 
   <footer>
     <p>© 2025 Slava Yun</p>
@@ -164,6 +124,7 @@
   setInterval(spawn, 90);
 })();
 </script>
+<div class="panel-indicators"></div>
 <script>
 const horizontalLine = document.querySelector('.scan-horizontal');
 
@@ -183,6 +144,90 @@ horizontalLine.style.animation = `scanX ${speed}s linear ${delay}s infinite ${di
 // начальный запуск и обновление каждые 10 секунд
 randomizeScan();
 setInterval(randomizeScan, 10000);
+</script>
+<script>
+  const scrollContainer = document.querySelector('.cyber-scroll');
+  const scrollLeft = document.getElementById('scrollLeft');
+  const scrollRight = document.getElementById('scrollRight');
+
+  // Листаем на ширину экрана
+  const scrollAmount = window.innerWidth;
+
+  scrollLeft.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  });
+
+  scrollRight.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  });
+</script>
+<script>
+const panels = document.querySelectorAll('.panel');
+const btnLeft = document.getElementById('scrollleft');
+const btnRight = document.getElementById('scrollright');
+let current = 0;
+// === Индикаторы панелей ===
+const indicatorContainer = document.querySelector('.panel-indicators');
+panels.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.classList.add('indicator');
+  if (i === 0) dot.classList.add('active');
+  dot.addEventListener('click', () => showPanel(i));
+  indicatorContainer.appendChild(dot);
+});
+
+function updateIndicators(index) {
+  const indicators = document.querySelectorAll('.indicator');
+  indicators.forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+}
+
+
+function showPanel(index) {
+  if (index < 0) index = panels.length - 1;
+  if (index >= panels.length) index = 0;
+
+  const currentPanel = panels[current];
+  const nextPanel = panels[index];
+
+  // Убираем текущий блок с анимацией исчезновения
+  currentPanel.classList.remove('active', 'flash');
+  currentPanel.classList.add('hide');
+
+  setTimeout(() => {
+    currentPanel.classList.remove('hide');
+
+    // Сбрасываем и перезапускаем анимацию вспышки для нового блока
+    nextPanel.classList.remove('active', 'flash');
+    void nextPanel.offsetWidth; // хак, чтобы принудительно перерисовать элемент
+    nextPanel.classList.add('active', 'flash');
+
+    current = index;
+  }, 800); // время совпадает с длительностью panelCollapse
+  updateIndicators(index);
+}
+
+// === Клики по краям для навигации ===
+const leftEdge = document.querySelector('.left-edge');
+const rightEdge = document.querySelector('.right-edge');
+function triggerWave(edge) {
+  edge.classList.remove('wave');
+  void edge.offsetWidth; // перезапуск анимации
+  edge.classList.add('wave');
+}
+
+leftEdge.addEventListener('click', () => {
+  triggerWave(leftEdge);
+  showPanel(current - 1);
+});
+rightEdge.addEventListener('click', () => {
+  triggerWave(rightEdge);
+  showPanel(current + 1);
+});
+
+// Инициализация
+panels[0].classList.add('active', 'flash');
 </script>
 
 </body>

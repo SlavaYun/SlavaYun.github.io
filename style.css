@@ -150,6 +150,109 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 footer{border-top:1px solid var(--line); margin-top:32px}
 footer .container{padding:20px; text-align:center; color:var(--muted); font-size:14px}
 
+/* === Неоновая навигация-индикаторы (фиолетово-синие тона) === */
+.panel-indicators {
+  position: fixed;
+  left: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 1000;
+}
+
+.indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #7f00ff44;
+  background: radial-gradient(circle, #00bfff22, #0a001a 80%);
+  box-shadow: 0 0 6px #7f00ff33, 0 0 10px #00bfff22;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator:hover {
+  transform: scale(1.2);
+  border-color: #00bfff;
+  box-shadow: 0 0 12px #00bfff77, 0 0 20px #7f00ff55;
+}
+
+.indicator.active {
+  transform: scale(1.5);
+  background: radial-gradient(circle, #00bfff, #7f00ff 60%);
+  border-color: #7f00ff;
+  box-shadow: 0 0 20px #00bfffcc, 0 0 40px #7f00ffaa;
+  animation: pulseActive 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseActive {
+  0%, 100% {
+    transform: scale(1.5);
+    box-shadow: 0 0 20px #00bfffaa, 0 0 40px #7f00ff88;
+  }
+  50% {
+    transform: scale(1.7);
+    box-shadow: 0 0 25px #00bfffcc, 0 0 50px #7f00ffbb;
+  }
+}
+
+.left-edge {
+  left: 0;
+  background: linear-gradient(90deg, rgba(127, 0, 255, 0) 0%, rgba(127, 0, 255, 0.05) 100%);
+}
+
+.right-edge {
+  right: 0;
+  background: linear-gradient(270deg, rgba(0, 191, 255, 0) 0%, rgba(0, 191, 255, 0.05) 100%);
+}
+
+.edge-zone:hover {
+  opacity: 1;
+  background: radial-gradient(circle at center,
+    rgba(127, 0, 255, 0.25) 0%,
+    rgba(0, 191, 255, 0.35) 100%);
+  box-shadow: inset 0 0 30px rgba(0, 191, 255, 0.4),
+              0 0 50px rgba(127, 0, 255, 0.25);
+  transition: all 0.4s ease;
+}
+/* === Эффект волны света по краю === */
+@keyframes edgeWave {
+  0% {
+    opacity: 0.8;
+    background: radial-gradient(circle at center,
+      rgba(0, 191, 255, 0.7) 0%,
+      rgba(127, 0, 255, 0.3) 50%,
+      transparent 100%);
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.4);
+    transform: scaleY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.2);
+    box-shadow: 0 0 60px rgba(127, 0, 255, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0);
+    box-shadow: none;
+  }
+}
+
+.edge-zone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.edge-zone.wave::after {
+  animation: edgeWave 0.8s ease-out;
+}
+
+
 /* ===== АДАПТИВ ===== */
 @media (max-width:900px){
   .cards{grid-template-columns:repeat(2,1fr)}
@@ -600,4 +703,255 @@ background-position: center;
 @media (prefers-reduced-motion: reduce) {
   .hud .coord-hit { animation: none; }
   .hud .coord-info { transition: opacity .2s ease, transform .2s ease; }
+}
+/* === КИБЕР-ПАНЕЛИ (новая версия) === */
+.cyber-scroll {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: visible; /* убираем скролл совсем */
+}
+/* === Неоновые сенсорные края === */
+.edge-zone {
+  position: absolute;
+  top: 0;
+  width: 1.1%;
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  z-index: 10;
+  background: transparent;
+  backdrop-filter: blur(4px);
+}
+
+.panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  width: 60vw; /* ширина панели */
+  height: 60vh; /* высота панели */
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #00ffff;
+  border: 2px solid #00ffff44;
+  border-radius: 12px;
+  box-shadow: 0 0 30px #00ffff33, inset 0 0 40px #00ffff22;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  background: radial-gradient(circle at center, #010014, #000010);
+  overflow: hidden;
+}
+
+/* Адаптив — если экран меньше 900px */
+@media (max-width: 900px) {
+  .panel {
+    top: 25%;
+    left: 50%;
+    width: 80vw;
+    height: 55vh;
+  }
+}
+
+/* Адаптив — мобильные */
+@media (max-width: 600px) {
+  .panel {
+    top: 30%;
+    left: 50%;
+    width: 90vw;
+    height: 60vh;
+  }
+}
+
+/* === Исчезновение (мягкое затухание сигнала) === */
+@keyframes panelCollapse {
+  0% {
+    opacity: 1;
+    filter: brightness(1) contrast(100%);
+  }
+  50% {
+    opacity: 0.4;
+    filter: brightness(2) contrast(150%) blur(1px);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(3) contrast(180%) blur(3px);
+  }
+}
+
+.panel.hide {
+  animation: panelCollapse 0.8s ease forwards;
+  will-change: opacity, filter;
+}
+/* === Появление (цифровой шум, пиксели, свечение) === */
+@keyframes panelAssemble {
+  0% {
+    opacity: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(0,255,255,0.05) 0px,
+      rgba(0,255,255,0.15) 1px,
+      rgba(0,255,255,0.05) 2px
+    );
+    background-size: 3px 100%;
+    filter: brightness(4) contrast(300%) blur(6px);
+    box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  }
+
+  30% {
+    background-size: 6px 100%;
+  }
+
+  60% {
+    background-size: 2px 100%;
+  }
+
+  100% {
+    opacity: 1;
+    background: radial-gradient(circle at center, #001122, #000010);
+    filter: brightness(1) contrast(100%) blur(0);
+    box-shadow: 0 0 25px #00ffff55, inset 0 0 40px #00ffff22;
+  }
+}
+
+.panel.active {
+  animation: panelAssemble 1.6s ease forwards;
+  opacity: 1;
+  visibility: visible;
+  will-change: opacity, filter;
+}
+.panel.active:before {
+  animation: cyberFlash 1.2s ease-out forwards;
+}
+
+.panel:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.1) 0px,
+    rgba(255,255,255,0.2) 2px,
+    rgba(255,255,255,0.1) 4px
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: flickerNoise 0.6s ease-in-out 0.2s;
+}
+
+@keyframes cyberFlash {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+    filter: blur(3px) brightness(3) drop-shadow(0 0 20px #00ffff);
+    background: radial-gradient(circle at center, rgba(0,255,255,0.8), rgba(120,0,255,0.6), transparent 70%);
+    box-shadow: 0 0 40px 15px rgba(0,255,255,0.4),
+                0 0 80px 30px rgba(120,0,255,0.3);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: blur(6px) brightness(6);
+    background: radial-gradient(circle at center, rgba(120,0,255,0.9), rgba(0,255,255,0.8), transparent 80%);
+    box-shadow: 0 0 60px 25px rgba(120,0,255,0.5),
+                0 0 120px 60px rgba(0,255,255,0.4);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+    filter: blur(4px) brightness(2.5);
+    background: radial-gradient(circle at center, rgba(0,255,255,0.6), rgba(80,0,255,0.4), transparent 80%);
+    box-shadow: 0 0 40px 10px rgba(0,255,255,0.3),
+                0 0 80px 40px rgba(80,0,255,0.2);
+  }
+  80% {
+    opacity: 0.4;
+    transform: scale(1.15);
+    filter: blur(8px) brightness(1.5);
+    background: radial-gradient(circle at center, rgba(80,0,255,0.4), rgba(0,255,255,0.3), transparent 90%);
+    box-shadow: 0 0 30px 10px rgba(120,0,255,0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+    filter: blur(12px) brightness(1);
+    background: radial-gradient(circle at center, rgba(0,255,255,0), rgba(120,0,255,0), transparent 100%);
+    box-shadow: none;
+  }
+}
+.panel.flash:before {
+  animation: cyberFlash 1s ease-out forwards;
+}
+.panel.active.flash::before {
+  animation-delay: 0s;
+  animation-duration: 1s;
+}
+
+.panel:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,255,255,0.8), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+    filter: blur(2px);
+  }
+
+@keyframes flickerNoise {
+  0%, 100% { opacity: 0; filter: blur(4px); }
+  30%, 60% { opacity: 0.4; filter: blur(1px); }
+  50% { opacity: 0.6; filter: brightness(3); }
+}
+
+
+@keyframes sparkFlash {
+  0% { opacity: 0; }
+  15% { opacity: 0.8; filter: blur(2px); }
+  50% { opacity: 0.3; filter: blur(4px); }
+  100% { opacity: 0; }
+}
+
+/* КИБЕР-НАВИГАЦИЯ (как раньше, но компактнее) */
+.cyber-nav {
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+  z-index: 99;
+  pointer-events: none;
+}
+
+.nav-btn {
+  pointer-events: all;
+  background: rgba(0, 255, 255, 0.05);
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px #00ffff55, inset 0 0 20px #00ffff22;
+  backdrop-filter: blur(3px);
+}
+
+.nav-btn:hover {
+  background: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 25px #00ffffaa, inset 0 0 30px #00ffff55;
+  transform: scale(1.2);
+}
+@keyframes stabilize {
+  0% { transform: translate(-50%, -50%) scale(1.03); }
+  50% { transform: translate(-50%, -50%) scale(0.98); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
