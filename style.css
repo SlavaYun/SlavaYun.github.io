@@ -103,7 +103,7 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
   left: 0;
   width: 2px;
   height: 100%;
-  animation: scanX 12s infinite;
+  animation: scanX 5s linear infinite alternate;
 }
 
 /* Анимации движения */
@@ -113,11 +113,8 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
 }
 
 @keyframes scanX {
-  0%   { left: 0%; animation-timing-function: ease-in; }
-  25%  { left: 40%; animation-timing-function: ease-out; }
-  50%  { left: 100%; animation-timing-function: ease-in; }
-  75%  { left: 60%; animation-timing-function: ease-out; }
-  100% { left: 0%; }
+  0%   { left: 0%; }
+  100% { left: 100%; }
 }
 
 /* ключевой момент — делаем аватар адекватного размера */
@@ -513,18 +510,17 @@ background-position: center;
     0 0 12px rgba(0,255,255,0.6);
   mix-blend-mode: screen;
 }
-/* --- Координаты (правый верхний угол, идеальное выравнивание) --- */
+/* ===== HUD — Координаты (правый верх, всплывающая карточка) ===== */
+
+/* Контейнер координат */
 .hud .coord {
   position: absolute;
-  /* Делаем лёгкий отступ от края окна, чтобы не прилипали */
   top: calc(env(safe-area-inset-top, 0px) + 22px);
   right: calc(env(safe-area-inset-right, 0px) + 250px);
-
-  /* Запрещаем перенос, выравниваем по линии других HUD-элементов */
   white-space: nowrap;
   line-height: 1;
   z-index: 30;
-  pointer-events: auto;
+  pointer-events: auto; /* важно для hover */
 }
 
 /* Видимая строка координат */
@@ -534,31 +530,29 @@ background-position: center;
   font-size: clamp(13px, 1.4vw, 15px);
   letter-spacing: 1px;
   color: #00eaff;
-
-  /* Включаем читаемость на любом фоне: отключаем screen и даём лёгкую тёмную кайму */
-  mix-blend-mode: normal !important;  /* перекрываем .hud span { mix-blend-mode: screen } */
+  mix-blend-mode: normal !important; /* перекрываем .hud span { mix-blend-mode: screen } */
   text-shadow:
-    0 0 2px rgba(0,0,0,0.60),        /* тёмная обводка — контраст */
-    0 0 6px #00ffff,
-    0 0 18px #00eaff,
-    0 0 32px #00ffff;
-
-  /* “Жизнь” в стиле HUD — мягкое дыхание и лёгкое дрожание */
+  0 0 2px rgba(0,0,0,0.6),
+  0 0 6px #00ffff,
+  0 0 18px #00eaff,
+  0 0 32px #00ffff;
   animation: coordPulse 3s ease-in-out infinite, coordShake 8s infinite;
   cursor: pointer;
 }
 
-/* Всплывающая карточка с деталями (город, страна, и т.п.) */
-.hud .coord .coord-info {
+/* Всплывающая карточка под координатами */
+.hud .coord-info {
   position: absolute;
-  top: 120%;               /* под строкой координат */
+  top: 120%;
   right: 0;
-  transform: translateY(4px);
   opacity: 0;
-  pointer-events: none;    /* клики не перехватывает, только показывает */
-  z-index: 40;           /* поверх всего HUD */
+  transform: translateY(8px);
+  pointer-events: none;
+  z-index: 40;
+  animation: coordGlow 5s ease-in-out infinite;
 
   padding: 8px 12px;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 13px;
   color: #e6ffff;
   border-radius: 6px;
@@ -568,13 +562,42 @@ background-position: center;
   box-shadow: 0 0 8px #00ffff;
   backdrop-filter: blur(6px);
 
-  transition: opacity .3s ease, transform .3s ease;
-  }
+  transition: opacity .3s ease, transform .3s ease, filter .3s ease;
+  filter: blur(3px);
+}
 
-/* --- Активация при наведении --- */
+/* Показ карточки при наведении */
 .hud .coord:hover .coord-info {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: auto;
+  filter: blur(0);
 }
 
+/* Мягкое "дыхание" и лёгкое дрожание — в стиле HUD */
+@keyframes coordPulse {
+  0%,100% { opacity: .92; filter: brightness(1); }
+  50%     { opacity: 1;   filter: brightness(1.35); }
+}
+@keyframes coordShake {
+  0%,100% { transform: translate(0,0); }
+  25%     { transform: translate(0.2px,-0.2px); }
+  50%     { transform: translate(-0.2px,0.2px); }
+  75%     { transform: translate(0.15px,0.15px); }
+}
+/* Неоновое "дыхание" для всплывающей карточки координат */
+@keyframes coordGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px #00ffff, 0 0 16px rgba(0,255,255,0.4);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 12px #00ffff, 0 0 32px rgba(0,255,255,0.7);
+    filter: brightness(1.25);
+  }
+}
+
+/* Доступность: уважаем prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .hud .coord-hit { animation: none; }
+  .hud .coord-info { transition: opacity .2s ease, transform .2s ease; }
+}

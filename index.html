@@ -164,6 +164,26 @@
   setInterval(spawn, 90);
 })();
 </script>
+<script>
+const horizontalLine = document.querySelector('.scan-horizontal');
+
+function randomizeScan() {
+  // случайная скорость от 4 до 9 секунд
+  const speed = (Math.random() * 5 + 4).toFixed(1);
+  // случайная задержка (0–3 сек)
+  const delay = (Math.random() * 3).toFixed(1);
+  // случайный выбор направления (нормальное или обратное)
+  const direction = Math.random() > 0.5 ? 'normal' : 'reverse';
+  
+horizontalLine.style.animation = 'none';
+void horizontalLine.offsetWidth; // сбрасывает текущее состояние
+horizontalLine.style.animation = `scanX ${speed}s linear ${delay}s infinite ${direction}`;
+}
+
+// начальный запуск и обновление каждые 10 секунд
+randomizeScan();
+setInterval(randomizeScan, 10000);
+</script>
 
 </body>
 </html>
