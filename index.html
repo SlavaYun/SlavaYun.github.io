@@ -54,6 +54,7 @@
 <main class="cyber-scroll">
   <div class="edge-zone left-edge"></div>
   <div class="edge-zone right-edge"></div>
+  <div class="panel-indicators"></div>
   <!-- ОБО МНЕ -->
   <section class="panel about" data-index="0">
     <h2>Обо мне</h2>
@@ -124,7 +125,32 @@
   setInterval(spawn, 90);
 })();
 </script>
-<div class="panel-indicators"></div>
+</script>
+
+<script>
+// === Реакция неоновых точек на движение мыши ===
+const indicators = document.querySelectorAll('.indicator');
+const range = 120; // радиус реакции (px)
+
+document.addEventListener('mousemove', (e) => {
+  indicators.forEach(dot => {
+    const rect = dot.getBoundingClientRect();
+    const dotX = rect.left + rect.width / 2;
+    const dotY = rect.top + rect.height / 2;
+    const dist = Math.hypot(e.clientX - dotX, e.clientY - dotY);
+
+    if (dist < range) {
+      const intensity = 1 - dist / range;
+      dot.style.boxShadow = `0 0 ${20 + intensity * 20}px rgba(0, 255, 255, ${0.6 + intensity * 0.4})`;
+      dot.style.transform = `scale(${1 + intensity * 0.3})`;
+    } else {
+      dot.style.boxShadow = '';
+      dot.style.transform = 'scale(1)';
+    }
+  });
+});
+</script>
+
 <script>
 const horizontalLine = document.querySelector('.scan-horizontal');
 
