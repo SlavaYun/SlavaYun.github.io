@@ -164,7 +164,7 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
 }
 
 .indicator {
-  width: 14px;
+  width: 30px;
   height: 14px;
   border-radius: 50%;
   border: 2px solid #7f00ff44;
@@ -204,35 +204,86 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
 /* Левый и правый градиенты (еле заметны, пока не наведёшься) */
 .left-edge {
   left: 0;
-  background: linear-gradient(90deg, rgba(127, 0, 255, 0.05) 0%, rgba(0, 255, 255, 0.05) 100%);
+  background: linear-gradient(90deg,
+    rgba(127, 0, 255, 0.02) 0%,
+    rgba(0, 255, 255, 0.03) 100%);
 }
 
 .right-edge {
   right: 0;
-  background: linear-gradient(270deg, rgba(0, 191, 255, 0.05) 0%, rgba(127, 0, 255, 0.05) 100%);
+  background: linear-gradient(270deg,
+    rgba(0, 191, 255, 0.02) 0%,
+    rgba(127, 0, 255, 0.03) 100%);
 }
 
 /* 🔥 Реакция при наведении */
 .edge-zone:hover {
-  opacity: 1;
-  background: radial-gradient(circle at center,
-    rgba(0, 255, 255, 0.25) 0%,
-    rgba(127, 0, 255, 0.3) 100%);
-  box-shadow: inset 0 0 40px rgba(0, 255, 255, 0.25),
-              0 0 60px rgba(127, 0, 255, 0.3);
-  transition: opacity 0.4s ease, box-shadow 0.5s ease;
+  opacity: 0.35;
+  box-shadow:
+    inset 0 0 25px rgba(0, 255, 255, 0.4),
+    0 0 35px rgba(127, 0, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
 }
-/* === Эффект дыхания для краёв === */
-@keyframes edgeBreath {
-  0%, 100% { 
-    box-shadow: inset 0 0 25px rgba(127, 0, 255, 0.15); 
+/* === Эффект дыхания + цветовой цикл для краёв === */
+@keyframes edgeBreathLeft {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 20px rgba(0, 255, 255, 0.08),
+      0 0 30px rgba(127, 0, 255, 0.08);
+    opacity: 0.25;
   }
-  50% { 
-    box-shadow: inset 0 0 35px rgba(0, 191, 255, 0.3); 
+  50% {
+    box-shadow:
+      inset 0 0 40px rgba(0, 255, 255, 0.18),
+      0 0 55px rgba(127, 0, 255, 0.18);
+    opacity: 0.38;
   }
 }
-.edge-zone {
-  animation: edgeBreath 6s ease-in-out infinite;
+
+@keyframes edgeBreathRight {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 25px rgba(127, 0, 255, 0.09),
+      0 0 35px rgba(0, 255, 255, 0.09);
+    opacity: 0.24;
+  }
+  50% {
+    box-shadow:
+      inset 0 0 50px rgba(127, 0, 255, 0.18),
+      0 0 70px rgba(0, 255, 255, 0.18);
+    opacity: 0.36;
+  }
+}
+
+/* 🔮 Лёгкое смещение цвета — поток энергии */
+@keyframes edgeHue {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(40deg); }
+  100% { filter: hue-rotate(0deg); }
+}
+
+/* применяем дыхание и цветовой сдвиг */
+.left-edge {
+  animation:
+    edgeBreathLeft 5.5s ease-in-out infinite,
+    edgeHue 14s ease-in-out infinite;
+  filter: hue-rotate(0deg);
+}
+
+.right-edge {
+  animation:
+    edgeBreathRight 6.3s ease-in-out infinite,
+    edgeHue 16s ease-in-out infinite reverse;
+  filter: hue-rotate(0deg);
+}
+
+/* применяем разные пульсации */
+.left-edge {
+  animation: edgeBreathLeft 5.5s ease-in-out infinite;
+}
+
+.right-edge {
+  animation: edgeBreathRight 6.2s ease-in-out infinite;
 }
 
 /* === Эффект волны света по краю === */
@@ -729,20 +780,71 @@ background-position: center;
   height: 100vh;
   overflow: visible; /* убираем скролл совсем */
 }
-/* === Неоновые сенсорные края === */
+/* ==== Энергетические боковые зоны (живая версия) ==== */
 .edge-zone {
   position: absolute;
-  top: 0;
-  width: 1.2%;
-  height: 100%;
+  top: 50%;
+  width: 1.6%;
+  height: 40%;
+  transform: translateY(-50%);
   cursor: pointer;
-  background: transparent;
-  backdrop-filter: blur(4px);
-  opacity: 0; /* 🔹 изначально почти невидимы */
-  transition: opacity 0.6s ease, box-shadow 0.6s ease, background 0.6s ease;
   z-index: 10;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 255, 255, 0.35) 0%,
+    rgba(127, 0, 255, 0.3) 50%,
+    rgba(255, 0, 170, 0.25) 100%
+  );
+
+  border-radius: 50% / 100%;
+  box-shadow:
+    0 0 25px rgba(0, 255, 255, 0.6),
+    0 0 45px rgba(127, 0, 255, 0.5),
+    0 0 70px rgba(255, 0, 200, 0.4);
+
+  opacity: 0.45;
+  backdrop-filter: blur(8px);
+  transition: all 0.6s ease;
+
+  /* двойная анимация — дыхание + смена цвета */
+  animation:
+    edgePulse 6s ease-in-out infinite,
+    edgeColorCycle 10s linear infinite;
 }
 
+/* ==== При наведении ==== */
+.edge-zone:hover {
+  opacity: 0.85;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow:
+    0 0 45px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(127, 0, 255, 0.7),
+    0 0 140px rgba(255, 0, 200, 0.6);
+}
+
+/* ==== Мягкий пульс яркости ==== */
+@keyframes edgePulse {
+  0%, 100% {
+    box-shadow:
+      0 0 25px rgba(0, 255, 255, 0.5),
+      0 0 45px rgba(127, 0, 255, 0.4),
+      0 0 70px rgba(255, 0, 200, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.7),
+      0 0 65px rgba(127, 0, 255, 0.6),
+      0 0 90px rgba(255, 0, 200, 0.5);
+  }
+}
+
+/* ==== Цикл смены оттенков (перетекание цвета) ==== */
+@keyframes edgeColorCycle {
+  0%   { filter: hue-rotate(0deg); }
+  50%  { filter: hue-rotate(90deg); }
+  100% { filter: hue-rotate(180deg); }
+}
 .panel {
   position: absolute;
   top: 50%;
@@ -751,8 +853,6 @@ background-position: center;
   transform-origin: center center;
   width: 60vw; /* ширина панели */
   height: 60vh; /* высота панели */
-  opacity: 0;
-  visibility: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -761,11 +861,73 @@ background-position: center;
   color: #00ffff;
   border: 2px solid #00ffff44;
   border-radius: 12px;
-  box-shadow: 0 0 30px #00ffff33, inset 0 0 40px #00ffff22;
-  transition: opacity 0.6s ease, transform 0.6s ease;
   background: radial-gradient(circle at center, #010014, #000010);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.05),
+              inset 0 0 35px rgba(127, 0, 255, 0.06);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  opacity: 0;
+  visibility: hidden;
   overflow: hidden;
+  animation: panelPulse 6s ease-in-out infinite;
 }
+
+
+/* создаём слабое внутреннее “дыхание” */
+@keyframes panelPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 25px rgba(0, 255, 255, 0.08),
+      inset 0 0 35px rgba(127, 0, 255, 0.1),
+      inset 0 0 55px rgba(255, 0, 200, 0.05);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    box-shadow:
+      0 0 45px rgba(0, 255, 255, 0.2),
+      inset 0 0 65px rgba(127, 0, 255, 0.15),
+      inset 0 0 85px rgba(255, 0, 200, 0.1);
+    filter: hue-rotate(40deg);
+  }
+}
+/* === Электрический отблеск по краям панелей === */
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 2;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 255, 255, 0) 0deg,
+    rgba(0, 255, 255, 0.15) 60deg,
+    rgba(127, 0, 255, 0.2) 120deg,
+    rgba(255, 0, 200, 0.25) 180deg,
+    rgba(0, 255, 255, 0.15) 240deg,
+    rgba(127, 0, 255, 0.2) 300deg,
+    rgba(0, 255, 255, 0) 360deg
+  );
+  animation: panelElectric 6s linear infinite;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  box-shadow: inset 0 0 25px rgba(0, 255, 255, 0.15);
+}
+
+/* Бегущая волна — эффект энергетического контура */
+@keyframes panelElectric {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.35;
+  }
+}
+
 /* === Голографический шум-фон для панелей === */
 .panel::before {
   content: "";
