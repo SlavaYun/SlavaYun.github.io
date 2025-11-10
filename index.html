@@ -125,8 +125,6 @@
   setInterval(spawn, 90);
 })();
 </script>
-</script>
-
 <script>
 // === Реакция неоновых точек на движение мыши ===
 const indicators = document.querySelectorAll('.indicator');
@@ -171,22 +169,7 @@ horizontalLine.style.animation = `scanX ${speed}s linear ${delay}s infinite ${di
 randomizeScan();
 setInterval(randomizeScan, 10000);
 </script>
-<script>
-  const scrollContainer = document.querySelector('.cyber-scroll');
-  const scrollLeft = document.getElementById('scrollLeft');
-  const scrollRight = document.getElementById('scrollRight');
 
-  // Листаем на ширину экрана
-  const scrollAmount = window.innerWidth;
-
-  scrollLeft.addEventListener('click', () => {
-    scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  });
-
-  scrollRight.addEventListener('click', () => {
-    scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  });
-</script>
 <script>
 const panels = document.querySelectorAll('.panel');
 const btnLeft = document.getElementById('scrollleft');
