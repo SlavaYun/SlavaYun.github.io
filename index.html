@@ -191,7 +191,6 @@ function updateIndicators(index) {
   });
 }
 
-
 function showPanel(index) {
   if (index < 0) index = panels.length - 1;
   if (index >= panels.length) index = 0;
@@ -199,29 +198,36 @@ function showPanel(index) {
   const currentPanel = panels[current];
   const nextPanel = panels[index];
 
-  // Убираем текущий блок с анимацией исчезновения
+  // Если кликнули по той же панели — ничего не делаем
+  if (currentPanel === nextPanel) return;
+
+  // Сначала делаем мягкое исчезновение текущей панели
   currentPanel.classList.remove('active', 'flash');
   currentPanel.classList.add('hide');
 
+  // Отключаем любые transform, чтобы не было layout shift
+  currentPanel.style.willChange = 'opacity';
+  nextPanel.style.willChange = 'opacity';
+
+  // Ждём окончания плавного скрытия (800ms как в твоём CSS)
   setTimeout(() => {
     currentPanel.classList.remove('hide');
 
-    // Сбрасываем и перезапускаем анимацию вспышки для нового блока
+    // Подготовка новой панели без рефлоу
     nextPanel.classList.remove('active', 'flash');
-    nextPanel.classList.remove('active', 'flash');
-requestAnimationFrame(() => {
-  // сначала делаем активной
-  nextPanel.classList.add('active');
-  // в следующий кадр добавляем вспышку — без рефлоу
-  requestAnimationFrame(() => {
-    nextPanel.classList.add('flash');
-  });
-});
 
+    // Даём кадр браузеру на расчёт перед включением
+    requestAnimationFrame(() => {
+      nextPanel.classList.add('active');
+      // Через кадр добавляем эффект "вспышки"
+      requestAnimationFrame(() => {
+        nextPanel.classList.add('flash');
+      });
+    });
 
     current = index;
-  }, 800); // время совпадает с длительностью panelCollapse
-  updateIndicators(index);
+    updateIndicators(index);
+  }, 800);
 }
 
 // === Клики по краям для навигации ===
