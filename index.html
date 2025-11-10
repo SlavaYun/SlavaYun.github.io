@@ -255,6 +255,25 @@ rightEdge.addEventListener('click', () => {
 // Инициализация
 panels[0].classList.add('active', 'flash');
 </script>
+<script>
+let targetX = 0, targetY = 0;
+let currentX = 0, currentY = 0;
+
+document.addEventListener("mousemove", e => {
+  targetX = (e.clientX / window.innerWidth - 0.5) * 30; // диапазон -15..15
+  targetY = (e.clientY / window.innerHeight - 0.5) * 30;
+});
+
+function animateParallax(){
+  currentX += (targetX - currentX) * 0.07; // скорость «догоняния»
+  currentY += (targetY - currentY) * 0.07;
+  document.body.style.setProperty("--nx", `${currentX}px`);
+  document.body.style.setProperty("--ny", `${currentY}px`);
+  requestAnimationFrame(animateParallax);
+}
+animateParallax();
+</script>
+
 
 </body>
 </html>
