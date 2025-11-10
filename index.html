@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="surge"></div>
     <div class="noise"></div>
-
 <header class="hero">
 
   <!-- HUD поверх hero -->
@@ -273,7 +273,28 @@ function animateParallax(){
 }
 animateParallax();
 </script>
+<script>
+document.addEventListener("click", e => {
+  // первая (основная) волна
+  const ripple1 = document.createElement("div");
+  ripple1.className = "click-ripple";
+  ripple1.style.left = e.clientX + "px";
+  ripple1.style.top = e.clientY + "px";
+  document.body.appendChild(ripple1);
 
+  // вторая (эхо-волна)
+  setTimeout(() => {
+    const ripple2 = document.createElement("div");
+    ripple2.className = "click-ripple echo";
+    ripple2.style.left = e.clientX + "px";
+    ripple2.style.top = e.clientY + "px";
+    document.body.appendChild(ripple2);
+    setTimeout(() => ripple2.remove(), 1500);
+  }, 300);
+
+  setTimeout(() => ripple1.remove(), 1200);
+});
+</script>
 
 </body>
 </html>
