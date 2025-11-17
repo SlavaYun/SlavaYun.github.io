@@ -58,6 +58,8 @@
   <div class="panel-indicators"></div>
   <!-- ОБО МНЕ -->
 <section class="panel about" data-index="0">
+  <div class="panel-holo"></div>
+  <div class="panel-frame"></div>
   <div class="panel-inner">
     <h2>Обо мне</h2>
     <p>Я создаю цифровые интерфейсы будущего, где код — это искусство.</p>
@@ -65,6 +67,8 @@
 </section>
 
 <section class="panel skills" data-index="1">
+  <div class="panel-holo"></div>
+  <div class="panel-frame"></div>
   <div class="panel-inner">
     <h2>Навыки</h2>
     <ul>
@@ -76,6 +80,8 @@
 </section>
 
 <section class="panel projects" data-index="2">
+  <div class="panel-holo"></div>
+  <div class="panel-frame"></div>
   <div class="panel-inner">
     <h2>Проекты</h2>
     <p>Каждый проект — это новая система, новая эволюция.</p>
@@ -83,6 +89,8 @@
 </section>
 
 <section class="panel contacts" data-index="3">
+  <div class="panel-holo"></div>
+  <div class="panel-frame"></div>
   <div class="panel-inner">
     <h2>Контакты</h2>
     <p>Связь доступна через защищённый канал.</p>
@@ -268,50 +276,12 @@ panels[0].classList.add('active', 'flash');
 let targetX = 0, targetY = 0;
 let currentX = 0, currentY = 0;
 
-document.addEventListener("mousemove", e => {
-  targetX = (e.clientX / window.innerWidth - 0.5) * 30; // диапазон -15..15
-  targetY = (e.clientY / window.innerHeight - 0.5) * 30;
-});
-
-function animateParallax(){
-  currentX += (targetX - currentX) * 0.07; // скорость «догоняния»
-  currentY += (targetY - currentY) * 0.07;
-  document.body.style.setProperty("--nx", `${currentX}px`);
-  document.body.style.setProperty("--ny", `${currentY}px`);
-  requestAnimationFrame(animateParallax);
-}
-animateParallax();
-</script>
-<script>
-document.addEventListener("click", e => {
-  // первая (основная) волна
-  const ripple1 = document.createElement("div");
-  ripple1.className = "click-ripple";
-  ripple1.style.left = e.clientX + "px";
-  ripple1.style.top = e.clientY + "px";
-  document.getElementById("ripple-layer").appendChild(ripple1);
-
-  // вторая (эхо-волна)
-  setTimeout(() => {
-    const ripple2 = document.createElement("div");
-    ripple2.className = "click-ripple echo";
-    ripple2.style.left = e.clientX + "px";
-    ripple2.style.top = e.clientY + "px";
-    document.getElementById("ripple-layer").appendChild(ripple2);
-    setTimeout(() => ripple2.remove(), 1500);
-  }, 300);
 
   setTimeout(() => ripple1.remove(), 1200);
-});
+
 </script>
-<script>
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth * 100).toFixed(2);
-  const y = (e.clientY / window.innerHeight * 100).toFixed(2);
-  document.body.style.setProperty('--mx', `${x}%`);
-  document.body.style.setProperty('--my', `${y}%`);
-});
-</script>
+
+<div class="neuron-lines"></div>
 
 </body>
 </html>

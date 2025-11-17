@@ -14,8 +14,11 @@
 html,body{margin:0;padding:0}
 body{
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: radial-gradient(circle at center,
+        #0b0017 0%,
+        #120026 40%,
+        #1a0038 70%);
+    color: #fff;
   line-height: 1.6;
 }
 
@@ -706,6 +709,9 @@ background-position: center;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  border-radius: 14px;
+overflow: hidden;
+z-index: 1000;
 }
 
 
@@ -1238,4 +1244,129 @@ body:active::after {
   pointer-events: none;
   overflow: visible;
   z-index: 9999;
+}
+.panel-holo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0,12) 0px,
+      rgba(255,255,255,0) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0,25) 0px,
+      rgba(255,255,255,0) 2px
+    );
+  opacity: 0.55;
+  animation: holoNoise 6s linear infinite;
+  mix-blend-mode: overlay;
+}
+
+.panel-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+    rgba(0,255,255,0.06) 0%,
+    rgba(196,0,255,0.04) 40%,
+    transparent 70%
+  );
+  box-shadow:
+    inset 0 0 40px rgba(0,255,255,0.15),
+    inset 0 0 70px rgba(196,0,255,0.15);
+}
+/* === НЕЙРОСЕТЬ (хаотичная матрица узлов) === */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background:
+        radial-gradient(circle at 15% 20%, rgba(0,255,255,0.18) 0px, transparent 90px),
+        radial-gradient(circle at 80% 40%, rgba(255,0,255,0.18) 0px, transparent 110px),
+        radial-gradient(circle at 35% 75%, rgba(0,180,255,0.15) 0px, transparent 120px);
+        
+    opacity: 0.25;
+    animation: neuralFloat 14s ease-in-out infinite alternate;
+}
+
+/* Узлы нейронов */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.8) 2px, transparent 4px),
+        radial-gradient(circle, rgba(255,255,255,0.6) 2px, transparent 4px),
+        radial-gradient(circle, rgba(255,255,255,0.7) 2px, transparent 4px);
+
+    background-size: 
+        300px 400px,
+        500px 350px,
+        420px 520px;
+
+    background-position:
+        10% 20%,
+        70% 50%,
+        40% 80%;
+
+    opacity: 0.18;
+    animation: neuralBlink 6s ease-in-out infinite;
+}
+@keyframes neuralBlink {
+    0%   { opacity: 0.16; }
+    20%  { opacity: 0.22; }
+    40%  { opacity: 0.14; }
+    60%  { opacity: 0.20; }
+    80%  { opacity: 0.18; }
+    100% { opacity: 0.16; }
+}
+
+/* Движение пятен */
+@keyframes neuralFloat {
+    from { transform: translateY(0px) scale(1); }
+    to   { transform: translateY(-30px) scale(1.05); }
+}
+
+/* Пульсация узлов */
+@keyframes neuralPulse {
+    0%,100% { opacity: 0.14; filter: blur(0.5px); }
+    50%     { opacity: 0.24; filter: blur(1px); }
+}
+/* === НЕЙРОННЫЕ СВЯЗИ === */
+body .neuron-lines {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+
+    background-image:
+        linear-gradient(60deg, rgba(255,255,255,0.25) 1px, transparent 1px),
+        linear-gradient(120deg, rgba(255,255,255,0.22) 1px, transparent 1px),
+        linear-gradient(200deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+
+    background-size: 
+       150px 200px,
+       200px 260px,
+       250px 300px;
+
+    opacity: 0.10;
+    filter: blur(1px);
+    animation: neuralLines 14s linear infinite;
+}
+
+@keyframes neuralLines {
+    0%   { opacity: 0.08; transform: translateY(0px); }
+    50%  { opacity: 0.14; transform: translateY(-20px); }
+    100% { opacity: 0.08; transform: translateY(0px); }
 }
