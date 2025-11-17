@@ -23,7 +23,6 @@ a{color:var(--brand); text-decoration:none}
 
 /* Контейнер и панель (мы ими обернули секции) */
 .container{max-width:var(--container); margin:0 auto; padding:24px;}
-.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:24px;}
 
 /* Заголовки */
 h1{margin:0 0 8px; font-size:clamp(28px,4vw,40px); font-weight:800}
@@ -37,48 +36,50 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
   text-align: center;
   overflow: hidden;
 
-  /* === НОВЫЙ ФОН — без внешних картинок === */
   background:
-    radial-gradient(1000px 600px at 50% 25%, rgba(140, 0, 255, 0.12), rgba(0, 0, 0, 0) 60%),
-    radial-gradient(800px 500px at 70% 65%, rgba(0, 255, 255, 0.07), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(1000px 600px at 50% 25%, rgba(140, 0, 255, 0.12), transparent 60%),
+    radial-gradient(800px 500px at 70% 65%, rgba(0, 255, 255, 0.07), transparent 60%),
     linear-gradient(180deg, #0a0014 0%, #05000e 60%, #02000a 100%);
-  background-attachment: fixed; /* лёгкий параллакс */
+  background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
 
-  /* === МЯГКОЕ СВЕЧЕНИЕ + АНИМАЦИЯ === */
   box-shadow: 0 0 40px rgba(0, 255, 255, 0.15),
               0 0 80px rgba(255, 0, 255, 0.1);
   transition: box-shadow 1.2s ease-in-out;
   animation: heroGlow 8s ease-in-out infinite;
 }
 
-/* === МЯГКОЕ ПУЛЬСИРУЮЩЕЕ СВЕЧЕНИЕ === */
-@keyframes heroGlow {
-  0%, 100% {
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.15),
-                0 0 80px rgba(255, 0, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 60px rgba(0, 255, 255, 0.35),
-                0 0 100px rgba(255, 0, 255, 0.25);
-  }
-}
+/* Внутренние элементы hero */
 .hero .container {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 .hero-wrap {
   max-width: 720px;
   margin: 0 auto;
+  position: relative;
+  z-index: 5;
 }
 
-/* === МАТРИЦА И ЛУЧ В ШАПКЕ === */
+.hero .avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
 
-/* Слои в шапке */
-.hero { position: relative; }
-.hero-wrap { position: relative; z-index: 5; }
+.hero .lead {
+  color: #e5e7eb;
+}
 
+.hero span {
+  color: #93c5fd;
+}
 /* Область с анимацией букв */
 #matrix{
   position:absolute;
@@ -144,21 +145,8 @@ h2{margin:0 0 12px; font-size:clamp(22px,3vw,28px)}
   100% { left: 100%; }
 }
 
-/* ключевой момент — делаем аватар адекватного размера */
-.hero .avatar{
-  width:160px; height:160px; border-radius:50%;
-  object-fit:cover; margin-bottom:18px;
-  border:4px solid #fff; box-shadow:0 6px 24px rgba(0,0,0,.2);
-}
-.hero .lead{color:#e5e7eb}
-.hero span{color:#93c5fd}
-
 /* Кнопки */
 .actions{margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
-.btn{display:inline-block; padding:12px 18px; background:var(--brand); color:#fff; font-weight:700; border-radius:10px; transition:.2s}
-.btn:hover{filter:brightness(.95)}
-.btn.btn-ghost{background:transparent; border:2px solid var(--brand); color:#fff}
-.btn.btn-ghost:hover{background:var(--brand)}
 
 /* ===== ФУТЕР ===== */
 footer{border-top:1px solid var(--line); margin-top:32px}
@@ -213,21 +201,6 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
     transform: scale(1.7);
     box-shadow: 0 0 25px #00bfffcc, 0 0 50px #7f00ffbb;
   }
-}
-
-/* Левый и правый градиенты (еле заметны, пока не наведёшься) */
-.left-edge {
-  left: 0;
-  background: linear-gradient(90deg,
-    rgba(127, 0, 255, 0.02) 0%,
-    rgba(0, 255, 255, 0.03) 100%);
-}
-
-.right-edge {
-  right: 0;
-  background: linear-gradient(270deg,
-    rgba(0, 191, 255, 0.02) 0%,
-    rgba(127, 0, 255, 0.03) 100%);
 }
 
 @keyframes edgeBreathRight {
@@ -294,14 +267,6 @@ isolation: isolate;
 
   filter: drop-shadow(0 0 6px rgba(0,255,255,.25))
           drop-shadow(0 0 18px rgba(0,255,255,.15));
-}
-/* === Постсвечение при клике по краю === */
-.left-edge.wave,
-.right-edge.wave {
-  animation:
-    edgeBreathLeft 5.5s ease-in-out infinite,
-    edgeGlow 4s ease-in-out infinite alternate,
-    edgeFlash 0.45s ease-out;
 }
 
 @keyframes edgeFlash {
@@ -419,16 +384,6 @@ background-position: center;
     0 -40px 80px rgba(196, 0, 255, 0.4);
 }
 
-/* аватар */
-.avatar {
-  width: 200px;
-  border-radius: 12px;
-  box-shadow:
-    0 0 14px rgba(8, 232, 217, 0.4),
-    0 0 28px rgba(8, 232, 217, 0.2);
-  border: 2px solid rgba(8, 232, 217, 0.4);
-}
-
 /* TITLE */
 .hero-title span {
   color: #08E8D9;
@@ -446,20 +401,6 @@ background-position: center;
   transition: 0.2s;
 }
 
-.btn:hover {
-  box-shadow: 0 0 12px #08E8D9;
-  background: rgba(8, 232, 217, 0.15);
-  transform: translateY(-2px);
-}
-
-.btn-ghost {
-  border-color: rgba(255,255,255,0.35);
-}
-
-.btn-ghost:hover {
-  border-color: #08E8D9;
-  color: #08E8D9;
-}
 /* --- GRAIN NOISE --- */
 .noise {
   pointer-events: none;
@@ -513,27 +454,6 @@ background-position: center;
   }
 }
 
-@keyframes coordPulse {
-  0%, 100% {
-    opacity: 1;
-    filter: brightness(1.2);
-    text-shadow:
-      0 0 4px #fff,
-      0 0 12px #00eaff,
-      0 0 25px #00eaff,
-      0 0 50px rgba(0, 255, 255, 0.9);
-  }
-  50% {
-    opacity: 1;
-    filter: brightness(1.6);
-    text-shadow:
-      0 0 8px #fff,
-      0 0 20px #00eaff,
-      0 0 40px #00eaff,
-      0 0 70px rgba(0, 255, 255, 1);
-  }
-}
-
 /* анимация мягкого дыхания */
 @keyframes glowPulse {
   0%, 100% {
@@ -560,14 +480,7 @@ background-position: center;
   z-index: 10;
 }
 
-/* — лёгкое дрожание (электромагнитные колебания) — */
-@keyframes coordShake{
-  0%,100% { transform: translate(0,0) rotate(0deg); }
-  20%     { transform: translate(0.5px,-0.5px) rotate(-0.2deg); }
-  40%     { transform: translate(-1px,0.5px)  rotate(0.3deg);  }
-  60%     { transform: translate(0.5px,1px)   rotate(-0.1deg); }
-  80%     { transform: translate(-0.5px,-0.5px) rotate(0.2deg); }
-}
+
 @keyframes coordFlicker{
   0%,100% { opacity:1;   filter:brightness(3) contrast(2); }
   10%     { opacity:.85; filter:brightness(2.5) contrast(2.2); }
@@ -576,13 +489,6 @@ background-position: center;
   50%     { opacity:1;   filter:brightness(3.5) contrast(2.8); }
   65%     { opacity:.90; filter:brightness(2.8) contrast(2.1); }
   80%     { opacity:.80; filter:brightness(2.4) contrast(1.9); }
-}
-
-/* — послесвечение / дыхание — */
-
-@keyframes coordGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.15); }
 }
 
 /* — подсветка Saint P при наведении — */
@@ -603,7 +509,7 @@ background-position: center;
 }
 
 .hud .sys    { top: 20px; left: 20px; }
-.hud .signal { top: 20px; right: 20px; }
+.hud .signal { top: px; right: 20px; }
 .hud .operator { bottom: 20px; right: 20px; }
 .hud .scan   { bottom: 20px; left: 20px; }
 
@@ -797,24 +703,11 @@ background-position: center;
   align-items: center;
   text-align: center;
 
-  color: #00ffff;
-  border: 2px solid #00ffff44;
-  border-radius: 12px;
-  background: radial-gradient(circle at center, #010014, #000010);
-
   opacity: 0;
   visibility: hidden;
-  overflow: hidden;
-
-  contain: layout paint;
-  isolation: isolate;
-  will-change: transform, opacity, filter;
-  backface-visibility: hidden;
-  perspective: 800px;
-
-  animation: panelPulse 6s ease-in-out infinite;
-  transition: opacity 0.6s ease, filter 0.6s ease;
+  pointer-events: none;
 }
+
 
 /* === АКТИВНАЯ ПАНЕЛЬ === */
 .panel.active {
@@ -839,29 +732,6 @@ background-position: center;
       inset 0 0 85px rgba(255, 0, 200, 0.1);
     filter: hue-rotate(40deg);
   }
-}
-/* === Электрический отблеск по краям панелей === */
-.panel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  pointer-events: none;
-  z-index: 2;
-  background: conic-gradient(
-    from 0deg,
-    rgba(0, 255, 255, 0) 0deg,
-    rgba(0, 255, 255, 0.15) 60deg,
-    rgba(127, 0, 255, 0.2) 120deg,
-    rgba(255, 0, 200, 0.25) 180deg,
-    rgba(0, 255, 255, 0.15) 240deg,
-    rgba(127, 0, 255, 0.2) 300deg,
-    rgba(0, 255, 255, 0) 360deg
-  );
-  animation: panelElectric 6s linear infinite;
-  opacity: 0.4;
-  mix-blend-mode: screen;
-  box-shadow: inset 0 0 25px rgba(0, 255, 255, 0.15);
 }
 
 /* Бегущая волна — эффект энергетического контура */
@@ -1111,24 +981,6 @@ background-position: center;
   animation-duration: 1s;
 }
 
-.panel:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(0,255,255,0.8), transparent 70%);
-  opacity: 0;
-  pointer-events: none;
-  mix-blend-mode: screen;
-    filter: blur(2px);
-  }
-
-@keyframes flickerNoise {
-  0%, 100% { opacity: 0; filter: blur(4px); }
-  30%, 60% { opacity: 0.4; filter: blur(1px); }
-  50% { opacity: 0.6; filter: brightness(3); }
-}
-
-
 @keyframes sparkFlash {
   0% { opacity: 0; }
   15% { opacity: 0.8; filter: blur(2px); }
@@ -1173,14 +1025,6 @@ background-position: center;
   50% { transform: translate(-50%, -50%) scale(0.98); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
-/* === PLASMA MODE ACTIVE — убираем старый фон, оставляем базовую структуру === */
-body {
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  z-index: 0;
-}
 
 /* анимация движения «потоков» */
 @keyframes quantumFlow{
@@ -1189,29 +1033,6 @@ body {
 }
 @media (prefers-reduced-motion: reduce){
   body{ animation: none; }
-}
-/* === NEURAL ENERGY STREAM — кибер-потоки данных === */
-body::before {
-  content: "";
-  position: fixed;
-  z-index: 1;
-  pointer-events: none;
-
-  background:
-    repeating-linear-gradient(135deg,
-      rgba(0, 255, 255, 0.05) 0px,
-      rgba(255, 0, 255, 0.05) 2px,
-      transparent 4px
-    ),
-    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 255, 0.15), transparent 70%),
-    linear-gradient(180deg, #0a0014 0%, #05006e 60%, #02000a 100%);
-  background-blend-mode: screen, overlay, normal;
-  background-size: 200% 200%;
-  filter: brightness(170%) contrast(150%) blur(0.2px);
-
-  animation: plasmaEnergy 20s ease-in-out infinite alternate;
-  transform: translateZ(0);
-  transition: background-position 0.4s ease-out;
 }
 
 /* === Анимация движения сетки === */
@@ -1225,45 +1046,10 @@ body::before {
 body:hover::before {
   filter: brightness(1.4) contrast(1.5) saturate(1.6);
 }
-/* === PLASMA SURGE LAYER — обновлённая версия === */
-.surge {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.07), transparent 70%),
-    radial-gradient(circle at 70% 70%, rgba(255, 0, 255, 0.07), transparent 70%);
-  mix-blend-mode: screen;
-  opacity: 0.45;
-  filter: blur(25px) hue-rotate(0deg);
-  animation: plasmaEnergy 20s ease-in-out infinite alternate,
-             flicker 3s ease-in-out infinite;
-  will-change: opacity, transform, filter;
-}
-
-@keyframes surgeSlide {
-  0%   { background-position: 0 0, 0 0; }
-  50%  { background-position: 100px 200px, -100px -200px; }
-  100% { background-position: 0 0, 0 0; }
-}
 
 @keyframes surgeHue {
   0%, 100% { filter: hue-rotate(0deg); }
   50%      { filter: hue-rotate(60deg); }
-}
-
-/* === Энергетический фон под всем — оптимизация === */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.05) 60%, transparent 100%);
-  filter: blur(40px) brightness(1.2) contrast(1.3);
-  opacity: 0.5;
-  animation: plasmaDrift 20s ease-in-out infinite alternate;
 }
 
 /* === Адаптация для слабых устройств === */
@@ -1316,29 +1102,7 @@ body::before {
   100% { transform: scale(2.4) rotate(35deg); opacity:0; }
 }
 
-/* === Плавное движение и дыхание плазмы === */
-@keyframes plasmaEnergy {
-  0% {
-    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-    filter: hue-rotate(0deg) brightness(120%) saturate(120%);
-  }
-  25% {
-    background-position: 200px 150px, -150px 100px, 100px 200px, 0 0, 0 0;
-    filter: hue-rotate(20deg) brightness(140%) saturate(150%);
-  }
-  50% {
-    background-position: 400px 300px, 100px 250px, 200px 400px, 0 0, 0 0;
-    filter: hue-rotate(40deg) brightness(125%) saturate(160%);
-  }
-  75% {
-    background-position: 300px 400px, -100px 200px, 300px 500px, 0 0, 0 0;
-    filter: hue-rotate(60deg) brightness(140%) saturate(150%);
-  }
-  100% {
-    background-position: 600px 600px, 0 400px, 500px 700px, 0 0, 0 0;
-    filter: hue-rotate(80deg) brightness(130%) saturate(140%);
-  }
-}
+
 @keyframes flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
   20%, 24%, 55% { opacity: 0.7; }
