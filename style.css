@@ -220,7 +220,22 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
     opacity: 0.36;
   }
 }
-
+@keyframes edgeBreathLeft {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 25px rgba(127, 0, 255, 0.09),
+      0 0 35px rgba(0, 255, 255, 0.09);
+    opacity: 0.24;
+    transform: scaleX(1);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 50px rgba(127, 0, 255, 0.18),
+      0 0 70px rgba(0, 255, 255, 0.18);
+    opacity: 0.36;
+    transform: scaleX(1.05); /* зеркальный лёгкий "выдох" */
+  }
+}
 /* 🔮 Лёгкое смещение цвета — поток энергии */
 @keyframes edgeHue {
   0% { filter: hue-rotate(0deg); }
@@ -228,27 +243,17 @@ footer .container{padding:20px; text-align:center; color:var(--muted); font-size
   100% { filter: hue-rotate(0deg); }
 }
 
-/* левый край */
 .left-edge {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;                 /* фиксируем у левого края */
-  width: 20px;             /* твоя ширина */
+  top: 50%;
+  left: 0;
+  width: 1.6%;
+  height: 40%;
+  transform: translateY(-50%);
   pointer-events: auto;
-  overflow: visible;
-  will-change: filter, box-shadow, transform;
-  contain: layout paint;
-isolation: isolate;
-  transform: translateZ(0);
+  overflow: hidden;
 
-  /* дыхание + свечение */
-  animation: edgeBreathLeft 5.5s ease-in-out infinite,
-             edgeGlow 4s ease-in-out infinite alternate;
-
-  /* мягкое неоновое поле */
-  filter: drop-shadow(0 0 6px rgba(0,255,255,.25))
-          drop-shadow(0 0 18px rgba(0,255,255,.15));
+  
 }
 
 /* правый край */
@@ -338,7 +343,28 @@ isolation: isolate;
     box-shadow: none;
   }
 }
-
+@keyframes edgeWaveLeft {
+  0% {
+    opacity: 0.8;
+    background: radial-gradient(circle at center,
+      rgba(127, 0, 255, 0.7) 0%,
+      rgba(0, 191, 255, 0.3) 50%,
+      transparent 100%);
+    box-shadow: 0 0 30px rgba(127, 0, 255, 0.4);
+    transform: scaleY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.2);
+    box-shadow: 0 0 60px rgba(0, 191, 255, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0);
+    box-shadow: none;
+  }
+}
+/* БАЗА ДЛЯ ОБЕИХ СТОРОН */
 .edge-zone::after {
   content: "";
   position: absolute;
@@ -347,11 +373,15 @@ isolation: isolate;
   pointer-events: none;
   border-radius: inherit;
 }
-.edge-zone.wave::after {
+/* ==== ПРАВАЯ СТОРОНА — ВОЛНА ==== */
+.edge-zone.right-edge.wave::after {
   animation: edgeWave 0.8s ease-out;
 }
 
-
+/* ==== ЛЕВАЯ СТОРОНА — ЗЕРКАЛЬНАЯ ВОЛНА ==== */
+.edge-zone.left-edge.wave::after {
+  animation: edgeWaveLeft 0.8s ease-out;
+}
 /* ===== АДАПТИВ ===== */
 @media (max-width:900px){
   .cards{grid-template-columns:repeat(2,1fr)}
@@ -1169,45 +1199,7 @@ body:active::after {
     transform: scale(1.02);
   }
 }
-/* === CLICK RIPPLE — НЕОНОВАЯ ВСПЫШКА ИЗ ТОЧКИ КАСАНИЯ === */
-.click-ripple {
-  position: fixed;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(circle, rgba(0,255,255,0.9) 0%, rgba(255,0,255,0.5) 50%, transparent 80%);
-  box-shadow:
-    0 0 30px 15px rgba(0,255,255,0.3),
-    0 0 60px rgba(255,0,255,0.4),
-    0 0 120px rgba(255,255,255,0.15);
-  mix-blend-mode: screen;
-  filter: brightness(150%) blur(1px);
-  transform: translate(-50%, -50%) scale(0);
-  animation: rippleExpand 1.2s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
-  z-index: 50;
-  backdrop-filter: contrast(130%) brightness(130%) blur(4px);
-}
-@keyframes rippleExpand {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-    filter: brightness(300%) blur(1px);
-  }
-  30% {
-    transform: translate(-50%, -50%) scale(2.5) perspective(300px) translateZ(-15px);
-    filter: brightness(200%) blur(2px);
-  }
-  60% {
-    transform: translate(-50%, -50%) scale(4) perspective(400px) translateZ(10px);
-    opacity: 0.6;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(6) perspective(500px) translateZ(0);
-    opacity: 0;
-    filter: brightness(120%) blur(3px);
-  }
-}
+
 .click-ripple.echo {
   opacity: 0.4;
   filter: brightness(180%) blur(3px);
@@ -1252,7 +1244,7 @@ body:active::after {
   pointer-events: none;
   background: repeating-linear-gradient(
       0deg,
-      rgba(255,255,255,0,12) 0px,
+      rgba(255,255,255,0.12) 0px,
       rgba(255,255,255,0) 2px
     ),
     repeating-linear-gradient(
@@ -1297,41 +1289,6 @@ body::before {
     animation: neuralFloat 14s ease-in-out infinite alternate;
 }
 
-/* Узлы нейронов */
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-
-    background-image:
-        radial-gradient(circle, rgba(255,255,255,0.8) 2px, transparent 4px),
-        radial-gradient(circle, rgba(255,255,255,0.6) 2px, transparent 4px),
-        radial-gradient(circle, rgba(255,255,255,0.7) 2px, transparent 4px);
-
-    background-size: 
-        300px 400px,
-        500px 350px,
-        420px 520px;
-
-    background-position:
-        10% 20%,
-        70% 50%,
-        40% 80%;
-
-    opacity: 0.18;
-    animation: neuralBlink 6s ease-in-out infinite;
-}
-@keyframes neuralBlink {
-    0%   { opacity: 0.16; }
-    20%  { opacity: 0.22; }
-    40%  { opacity: 0.14; }
-    60%  { opacity: 0.20; }
-    80%  { opacity: 0.18; }
-    100% { opacity: 0.16; }
-}
-
 /* Движение пятен */
 @keyframes neuralFloat {
     from { transform: translateY(0px) scale(1); }
@@ -1369,4 +1326,159 @@ body .neuron-lines {
     0%   { opacity: 0.08; transform: translateY(0px); }
     50%  { opacity: 0.14; transform: translateY(-20px); }
     100% { opacity: 0.08; transform: translateY(0px); }
+}
+/* === КИБЕР-РАЗДЕЛИТЕЛЬ ШАПКИ И ПАНЕЛЕЙ === */
+.hero-separator {
+  position: relative;
+  width: 100%;
+  height: 90px;      /* толщина перехода */
+  margin-top: -20px; /* плавное слияние */
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* —––––––––– ЛАЗЕРНАЯ ЛИНИЯ —––––––––– */
+.laser-line {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+
+  background: linear-gradient(90deg,
+    rgba(0,255,255,0) 0%,
+    rgba(0,255,255,0.9) 50%,
+    rgba(0,255,255,0) 100%
+  );
+  filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 16px #ff00ff);
+
+  animation: laserFlow 4s linear infinite;
+  opacity: .75;
+}
+
+@keyframes laserFlow {
+  0%   { background-position: 0 0; }
+  100% { background-position: 300% 0; }
+}
+
+/* —––––––––– ТУМАН / ДЫМКА ПОД ЛИНИЕЙ —––––––––– */
+.laser-fog {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  height: 100px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(140, 0, 255, 0.35) 0%,
+    rgba(140, 0, 255, 0.18) 45%,
+    rgba(10, 0, 20, 0) 100%
+  );
+  filter: blur(30px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: fogPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes fogPulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+/* === КОНТЕЙНЕР ДЛЯ ЭЛЕКТРОДУГ === */
+.laser-arcs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;      /* рабочая зона дуг вокруг линии */
+  pointer-events: none;
+  overflow: visible;
+  z-index: 12;        /* выше линии и тумана */
+}
+
+/* === МНОГОСЛОЙНАЯ ЭЛЕКТРОДУГА === */
+.arc {
+  position: absolute;
+  top: 0;
+  width: 120px;       /* будет переопределяться JS */
+  height: 120px;      /* будет переопределяться JS */
+  border-radius: 50%;
+  transform-origin: center bottom;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: arcFlash var(--dur, 1.6s) ease-out forwards;
+}
+
+/* ВНЕШНИЙ МЯГКИЙ СВЕТ */
+.arc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border-top: 4px solid var(--glow-color, rgba(0,255,255,0.4));
+  filter: blur(12px);
+  opacity: 0.8;
+}
+
+/* ВНУТРЕННИЙ ЯРКИЙ ЛУЧ */
+.arc::after {
+  content: "";
+  position: absolute;
+  inset: 6px 12px;
+  border-radius: inherit;
+  border-top: 2px solid var(--core-color, #00ffff);
+  filter: blur(4px);
+  opacity: 1;
+}
+
+/* АНИМАЦИЯ ВСПЫШКИ ДУГИ */
+@keyframes arcFlash {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--rot, 0deg)) scale(0.6);
+  }
+  18% {
+    opacity: 1;
+    transform: rotate(var(--rot, 0deg)) scale(1.2);
+  }
+  45% {
+    opacity: 0.8;
+    transform: rotate(var(--rot, 0deg)) scale(1.0);
+  }
+  70% {
+    opacity: 0.5;
+    transform: rotate(var(--rot, 0deg)) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--rot, 0deg)) scale(1.4);
+  }
+}
+
+/* === ПОЛОСА ПЕРЕГРУЗА / NOISE НА ЛИНИИ === */
+.laser-static-noise {
+  position: absolute;
+  top: 33px;            /* рядом с лазерной линией */
+  left: 0;
+  width: 100%;
+  height: 6px;
+  pointer-events: none;
+  z-index: 11;
+  mix-blend-mode: screen;
+
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0,255,255,0.2) 0px,
+    rgba(255,0,255,0.22) 2px,
+    rgba(0,255,255,0.18) 4px
+  );
+
+  animation: noiseFlicker 0.09s steps(3) infinite;
+}
+
+@keyframes noiseFlicker {
+  0%   { opacity: 0.18; filter: brightness(1.2); }
+  50%  { opacity: 0.45; filter: brightness(2.4); }
+  100% { opacity: 0.25; filter: brightness(1.4); }
 }

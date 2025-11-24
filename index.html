@@ -51,10 +51,17 @@
 
 </header>
 
+<div class="hero-separator">
+  <div class="laser-line"></div>
+  <div class="laser-static-noise"></div>   <!-- перегруз сигнала -->
+  <div class="laser-fog"></div>
+  <div class="laser-arcs" id="laser-arcs"></div>
+</div>
+
 
 <main class="cyber-scroll">
   <div class="edge-zone left-edge"></div>
-  <div class="edge-zone right-edge"></div>
+<div class="edge-zone right-edge"></div>
   <div class="panel-indicators"></div>
   <!-- ОБО МНЕ -->
 <section class="panel about" data-index="0">
@@ -147,23 +154,6 @@
 const indicators = document.querySelectorAll('.indicator');
 const range = 120; // радиус реакции (px)
 
-document.addEventListener('mousemove', (e) => {
-  indicators.forEach(dot => {
-    const rect = dot.getBoundingClientRect();
-    const dotX = rect.left + rect.width / 2;
-    const dotY = rect.top + rect.height / 2;
-    const dist = Math.hypot(e.clientX - dotX, e.clientY - dotY);
-
-    if (dist < range) {
-      const intensity = 1 - dist / range;
-      dot.style.boxShadow = `0 0 ${20 + intensity * 20}px rgba(0, 255, 255, ${0.6 + intensity * 0.4})`;
-      dot.style.transform = `scale(${1 + intensity * 0.3})`;
-    } else {
-      dot.style.boxShadow = '';
-      dot.style.transform = 'scale(1)';
-    }
-  });
-});
 </script>
 
 <script>
@@ -273,15 +263,63 @@ rightEdge.addEventListener('click', () => {
 panels[0].classList.add('active', 'flash');
 </script>
 <script>
-let targetX = 0, targetY = 0;
-let currentX = 0, currentY = 0;
-
-
-  setTimeout(() => ripple1.remove(), 1200);
 
 </script>
 
 <div class="neuron-lines"></div>
+
+<script>
+const arcContainer = document.getElementById("laser-arcs");
+
+function spawnArc() {
+  if (!arcContainer) return;
+
+  const arc = document.createElement("div");
+  arc.classList.add("arc");
+
+  // Случайный размер дуги (по ощущениям — от локальной искры до большой плазмы)
+  const size = 60 + Math.random() * 100;      // 60–160px
+  arc.style.width  = size + "px";
+  arc.style.height = size + "px";
+
+  // Случайная позиция по ширине
+  const pos = Math.random() * 100;            // 0–100%
+  arc.style.left = pos + "%";
+
+  // Случайный наклон дуги (-90° ... +90°)
+  const rot = Math.random() * 180 - 90;
+  arc.style.setProperty("--rot", rot + "deg");
+
+  // ПАЛИТРА НЕОНА: синий, фиолетовый, красный
+  const palette = [
+    "#00ffff",  // синий неон
+    "#b400ff",  // фиолетовый
+    "#ff0055"   // красно-неоновый
+  ];
+  const color = palette[Math.floor(Math.random() * palette.length)];
+
+  // Основной и внешний цвет
+  arc.style.setProperty("--core-color", color);        // внутренний луч
+  arc.style.setProperty("--glow-color", color + "66"); // внешний мягкий свет (#RRGGBBAA)
+
+  // Случайная длительность вспышки
+  const duration = 1.0 + Math.random() * 2.0;          // 1.0–3.0s
+  arc.style.setProperty("--dur", duration + "s");
+
+  arcContainer.appendChild(arc);
+
+  // Чистим DOM после анимации
+  setTimeout(() => arc.remove(), (duration + 0.5) * 1000);
+}
+
+// Хаотичный поток дуг
+(function loopArcs() {
+  spawnArc();
+  const delay = 220 + Math.random() * 680;  // 220–900ms
+  setTimeout(loopArcs, delay);
+})();
+</script>
+
 
 </body>
 </html>
